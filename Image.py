@@ -12,12 +12,12 @@ class Image:
     def getPanels(self,id):
         panel = self.data[:,(0+id*7):(7+id*7)]
         panel_hex = bytearray()
-        for row in panel :
+        for row in reversed(panel) :
             panel_hex.append(self.calculate_row(row))
         return panel_hex
 
     def calculate_row(self,row):
-        val = np.matmul((row.reshape(1,7)),(np.array([1,2,4,8,16,32,64]).reshape(7,1)))
+        val = np.matmul((row.reshape(1,7)),(np.array([64,32,16,8,4,2,1]).reshape(7,1)))
         return val[0][0].item()
 
     def visualize(self):
