@@ -12,6 +12,9 @@ class Image:
     def __add__(self, other):
         return Image(data=np.around((self.data+other.getData()+0.2)/2).astype(int))
 
+    def __sub__(self, other):
+        return Image(data=np.around((self.data-other.getData()).astype(int)))
+
     def __iadd__(self, other):
         self.data=np.around((self.data+other.getData()+0.2)/2).astype(int)
         return self
@@ -80,13 +83,9 @@ class Image:
 
 if __name__ == "__main__":
     image = Image("image.png")
-    image1 = Image("image.png")
-    print(image.getPanel(0))
     image.show()
-    image.load("image.txt")
-    image.show()
-    image.save("test.png")
-    (~image).show()
+    image1 = Image("image.txt")
+    (image-image1).show()
 
 
 
