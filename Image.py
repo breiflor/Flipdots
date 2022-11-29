@@ -4,13 +4,16 @@ import cv2
 class Image:
 
     def __init__(self,imagepath=None):
-        self.data = np.eye(28,dtype=int) # creates eigen matrix
+        if (imagepath is not None):
+            self.data = self.load_data(imagepath) # checks if text or picture representation and inits class
+        else:
+            self.data = np.eye(28,dtype=int) # creates eigen matrix as default image
         print(self.data)
 
     def setData(self,data):
         self.data = data
 
-    def getPanels(self,id):
+    def getPanel(self,id):
         panel = self.data[:,(0+id*7):(7+id*7)]
         panel_hex = bytearray()
         for row in reversed(panel) :
@@ -30,16 +33,28 @@ class Image:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def load_txt(self):
-        pass
+    def load_txt(self,filename="image.txt"):
+        self.data = np.genfromtxt(filename, delimiter=' ', dtype=int,encoding = 'UTF-8')
 
-    def load_image(self):
-        pass
-    
-    def save_txt(self):
-        pass
+    def save_txt(self,filename="image.txt"):
+        np.savetxt(filename, self.data, fmt="%s")
+
+    def save_image(self,filename="image.png"):
+        img = np.zeros((28,28))
+        img = img+self.data*254
+        cv2.imwrite(filename,img)
+
+    def load_image(self,filename="image.png"):
+        self.data = (cv2.imread(filename, 0)/254).astype(int)
 
 if __name__ == "__main__":
     image = Image()
-    print(image.getPanels(0))
+    print(image.getPanel(0))
+    #image.save_txt()
+    image.save_image()
+    image.load_txt()
     image.show()
+    image.load_image()
+    image.show()
+
+
