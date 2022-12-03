@@ -7,9 +7,12 @@ class Animation:
 
     def __init__(self,path=None,loop=False):
         self.path = path
+
         self.image_list = []
         self.loop = loop
         self.current_index = 0
+        if (path is not None):
+            self.load(path)
         pass
 
     def __add__(self, other):

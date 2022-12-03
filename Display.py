@@ -1,11 +1,17 @@
+import time
+
 import serial
+
+import Animation
 from Image import *
+from Animation import *
 
 class Display:
     header = bytearray([0x80, 0x83])
     endbyte = bytearray([0x8F])
 
     def __init__(self,debug=False):
+        self.playing = True #Control variable to be able to stop looped animation
         self.debug = debug
         if(not self.debug):
             self.ser = serial.Serial('/dev/ttyAMA0',19200)
@@ -19,6 +25,17 @@ class Display:
             self.ser.write(self.build_message(data,addr))
         else:
             print("DEBUG: Sent"+str(self.build_message(data,addr)))
+
+    def play_animation(self,animation):
+        animation.init()
+        while self.playing:
+            image,delay = animation.getframe()
+            self.sendImage(image)
+            if(delay > 0):
+                time.sleep(delay)
+            else:
+                break
+
 
     def black(self):
         self.send_message(bytearray([ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
@@ -36,4 +53,6 @@ if __name__ == "__main__":
     display = Display(True)
     image = Image()
     display.sendImage(image)
+    animation = Animation("default_animation/")
+    display.play_animation(animation)
 

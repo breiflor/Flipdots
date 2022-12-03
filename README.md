@@ -6,4 +6,6 @@ This projects aims to integrate the Flipdot displays into Homeassistant.
 - python-opencv
 - numpy
 - PySimpleGUI
+- json
+- pathlib
 
