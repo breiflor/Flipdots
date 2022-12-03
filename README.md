@@ -2,7 +2,8 @@
 This projects aims to integrate the Flipdot displays into Homeassistant.
 
 ##Dependencies
-- arduinoserial
+- pyserial
 - python-opencv
 - numpy
+- PySimpleGUI
 

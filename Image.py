@@ -4,7 +4,7 @@ import pathlib
 
 class Image:
 
-    def __init__(self,imagepath=None,data=np.eye(28,dtype=int)):
+    def __init__(self,imagepath=None,data=np.zeros((28,28),dtype=int)):
         self.data=data  # creates eigen matrix as default image
         if (imagepath is not None):
             self.load(imagepath) # checks if text or picture representation and inits class
@@ -25,6 +25,12 @@ class Image:
 
     def setData(self,data):
         self.data = data
+
+    def toggleDot(self,x,y):
+        if self.data[x][y] > 0:
+            self.data[x][y] = 0
+        else:
+            self.data[x][y] = 1
 
     def getData(self):
         return np.copy(self.data)
