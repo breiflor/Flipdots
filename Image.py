@@ -1,6 +1,14 @@
 import numpy as np
 import cv2
 import pathlib
+import json
+
+
+class NumpyArrayEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 class Image:
 
@@ -47,11 +55,9 @@ class Image:
             row = np.empty_like(r)
             if y > 0:
                 row[:y] = fill
-                print(str(index)+str(r[:-y]))
                 row[y:] = r[:-y]
             elif y < 0:
                 row[y:] = fill
-                print(str(index)+str(r[:-y]))
                 row[:y] = r[-y:]
             else:
                 row = r
@@ -96,6 +102,15 @@ class Image:
     def load_image(self, filepath="image.png"):
         self.data = (cv2.imread(filepath, 0) / 254).astype(int)
 
+    def to_string(self):
+        numpyData = {"image": self.data}
+        return json.dumps(numpyData, cls=NumpyArrayEncoder)
+
+    def from_string(self,payload):
+        decodedArrays = json.loads(payload)
+        self.data = np.asarray(decodedArrays["image"])
+        pass
+
     def load(self, imagepath):
         suf = pathlib.Path(imagepath).suffix
         if(suf == ".png"):
@@ -109,8 +124,10 @@ class Image:
         suf = pathlib.Path(imagepath).suffix
         if(suf == ".png"):
             self.save_image(imagepath)
+            return imagepath
         elif(suf == ".txt"):
             self.save_txt(imagepath)
+            return imagepath
         else:
             print("Wrong Type saving Image Data to "+ imagepath +" (only .png and .txt supported)")
 
@@ -119,6 +136,7 @@ if __name__ == "__main__":
     image.show()
     image.shift_and_fill(0,1,1)
     image.show()
-
+    image.from_string(image.to_string())
+    image.show()
 
 
