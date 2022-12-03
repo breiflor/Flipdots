@@ -32,6 +32,33 @@ class Image:
         else:
             self.data[x][y] = 1
 
+    def shift_and_fill(self,x=0,y=0,fill=0):
+        res = np.empty_like(self.data)
+        if x > 0:
+            res[:x] = fill
+            res[x:] = self.data[:-x]
+        elif x < 0:
+            res[x:] = fill
+            res[:x] = self.data[-x:]
+        else:
+            res = self.data
+        self.data = res #maybe copy here
+        for index,r in enumerate(res):
+            row = np.empty_like(r)
+            if y > 0:
+                row[:y] = fill
+                print(str(index)+str(r[:-y]))
+                row[y:] = r[:-y]
+            elif y < 0:
+                row[y:] = fill
+                print(str(index)+str(r[:-y]))
+                row[:y] = r[-y:]
+            else:
+                row = r
+            self.data[index] = row
+        #this method shifts an image and fills the remaining spots with the specifed value
+        self.data = res #maybe a copy is needed here
+
     def getData(self):
         return np.copy(self.data)
 
@@ -90,8 +117,8 @@ class Image:
 if __name__ == "__main__":
     image = Image("image.png")
     image.show()
-    image1 = Image("image.txt")
-    (image-image1).show()
+    image.shift_and_fill(0,1,1)
+    image.show()
 
 
 
