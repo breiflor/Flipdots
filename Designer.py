@@ -1,3 +1,4 @@
+import copy
 import datetime
 
 from Image import *
@@ -31,6 +32,7 @@ class Designer:
                 sg.Button(sg.SYMBOL_RIGHT, key='-PLAY-',  button_color=sg.theme_background_color(), border_width=0),
                 sg.Button(sg.SYMBOL_RIGHT_ARROWHEAD, key='-NEXT-',  button_color=sg.theme_background_color(), border_width=0),
                 sg.Button("+", key='-ADD-',  button_color=sg.theme_background_color(), border_width=0),
+                sg.Button("C", key='-COPY-',  button_color=sg.theme_background_color(), border_width=0),
                 sg.Button("-", key='-DEL-',  button_color=sg.theme_background_color(), border_width=0),
                 sg.Input('TIME',size=(5, 1),enable_events=True, key="-TIME-"),
                 sg.Text("s"),
@@ -84,6 +86,9 @@ class Designer:
                 else:
                     self.animation.insert_entry((Image(),1),self.current_frame_id+1)
                 self.next_image()
+            elif event == "-COPY-":
+                self.animation.insert_entry((Image(),1),self.current_frame_id)
+                self.next_image()
             elif event == "-DEL-":
                 self.animation.delete_entry(self.current_frame_id)
                 if (self.current_frame_id < (len(self.animation.image_list) - 1)):
@@ -107,7 +112,7 @@ class Designer:
                 self.refresh_image()
 
     def prev_image(self):
-        self.animation.set_entry((self.image, self.time), self.current_frame_id)
+        self.animation.set_entry((copy.deepcopy(self.image), self.time), self.current_frame_id)
         if (self.current_frame_id == 0):
             self.current_frame_id = (len(self.animation.image_list) - 1)
         else:
@@ -116,7 +121,7 @@ class Designer:
         self.refresh_image()
 
     def next_image(self):
-        self.animation.set_entry((self.image, self.time), self.current_frame_id)
+        self.animation.set_entry((copy.deepcopy(self.image), self.time), self.current_frame_id)
         if (self.current_frame_id < (len(self.animation.image_list) - 1)):
             self.current_frame_id = self.current_frame_id + 1
         else:
