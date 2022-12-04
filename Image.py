@@ -76,7 +76,7 @@ class Image:
         return panel_hex
 
     def calculate_row(self,row):
-        val = np.matmul((row.reshape(1,7)),(np.array([64,32,16,8,4,2,1]).reshape(7,1)))
+        val = np.matmul((row.reshape(1,7)),(np.array([1,2,4,8,16,32,64]).reshape(7,1)))
         return val[0][0].item()
 
     def show(self,original=False,scale_to_px=500,time = 0):
