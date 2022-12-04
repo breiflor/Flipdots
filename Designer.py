@@ -1,6 +1,7 @@
 import datetime
 
 from Image import *
+from Animation import *
 import numpy as np
 import PySimpleGUI as sg
 
@@ -12,6 +13,9 @@ class Designer:
         self.image = Image()
         self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout())
         self.event_loop()
+        self.animation = None
+        self.time = -1
+        self.current_frame_id = 0
 
 
     def generate_layout(self):
@@ -21,6 +25,12 @@ class Designer:
                 sg.In(size=(25, 1), enable_events=True, key="-FILE-"),
                 sg.FileBrowse(),
                 sg.Button('Load', button_color=('white', 'blue')),
+                sg.Button(sg.SYMBOL_LEFT_ARROWHEAD, key='-PREV-',  button_color=sg.theme_background_color(), border_width=0),
+                sg.Button(sg.SYMBOL_RIGHT, key='-PLAY-',  button_color=sg.theme_background_color(), border_width=0),
+                sg.Button(sg.SYMBOL_RIGHT_ARROWHEAD, key='-NEXT-',  button_color=sg.theme_background_color(), border_width=0),
+                sg.Input('TIME',size=(5, 1),enable_events=True, key="-TIME-"),
+                sg.Text("s"),
+                #TODO add play and back and forward button here (gray out if only image is loaded)
             ],
             [
                 self.build_button_map(),
@@ -42,19 +52,57 @@ class Designer:
                 break
             elif event == "-FILE-":
                 self.file = values["-FILE-"]
+            elif event == "-TIME-":
+                if(values["-TIME-"]!=""):
+                    self.time = int(values["-TIME-"])
+                    self.update_time()
             elif event == "Load":
                 if self.file is not None:
-                    self.load_image(self.file)
+                    suf = pathlib.Path(self.file).suffix
+                    if(suf == ".json"):
+                        self.load_amimation(self.file)
+                    else:
+                        self.load_image(self.file)
                     self.window["-SAVE-"].update(str(datetime.datetime.now())+"      Loaded: "+self.file)
             elif event == "Save":
-                self.image.save(self.file)
+                suf = pathlib.Path(self.file).suffix
+                if(suf == ".json"):
+                    self.animation.set_entry((self.image,self.time),self.current_frame_id)
+                    self.animation.store(self.file)
+                else:
+                    self.image.save(self.file)
                 self.window["-SAVE-"].update(str(datetime.datetime.now())+"      Saved: "+self.file)
+            elif event == "-PREV-":
+                self.prev_image()
+            elif event == "-PLAY-":
+                pass
+            elif event == "-NEXT-":
+                self.next_image()
             else:
                 self.image.toggleDot(event[0],event[1])
                 self.refresh_image()
 
+    def prev_image(self):
+        self.animation.set_entry((self.image, self.time), self.current_frame_id)
+        if (self.current_frame_id == 0):
+            self.current_frame_id = (len(self.animation.image_list) - 1)
+        else:
+            self.current_frame_id = self.current_frame_id - 1
+        self.image, self.time = self.animation.get_entry(self.current_frame_id)
+        self.refresh_image()
+
+    def next_image(self):
+        self.animation.set_entry((self.image, self.time), self.current_frame_id)
+        if (self.current_frame_id < (len(self.animation.image_list) - 1)):
+            self.current_frame_id = self.current_frame_id + 1
+        else:
+            self.current_frame_id = 0
+        self.image, self.time = self.animation.get_entry(self.current_frame_id)
+        self.refresh_image()
+
     def refresh_image(self):
         field = self.image.getData()
+        self.update_time()
         for i,col in enumerate(field):
             for j,element in enumerate(col):
                 if(element > 0):
@@ -65,6 +113,16 @@ class Designer:
     def build_button_map(self):
         # writing this out would drastically improve the startup performace - currently not the case cause Im lazy
         return [[sg.Button(str('0'), size=(2, 1), pad=(0,0), border_width=0, key=(row,col),button_color=('gray', 'black')) for col in range(28)] for row in range(28)]
+
+    def load_amimation(self, file):
+        self.current_frame_id = 0
+        self.animation = Animation(file)
+        self.image,self.time = self.animation.get_entry()
+        self.refresh_image()
+
+    def update_time(self):
+        self.window["-TIME-"].update(str(self.time))
+
 
 
 if __name__ == "__main__":

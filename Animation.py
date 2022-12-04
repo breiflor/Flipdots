@@ -30,13 +30,23 @@ class Animation:
         self.current_index = 0
 
     def load(self,path):
-        with open(path+"fd_animation_manifest.json","r") as json_file:
-            self.parse_storage_list(json.load(json_file))
+        if (pathlib.Path(path).is_file()):
+            file = path
+        else:
+            file = path+"/fd_animation_manifest.json"
+        with open(file,"r") as json_file:
+            self.parse_storage_list(json.load(json_file),str(pathlib.Path(file).parent))
 
     def store(self,path):
-        pathlib.Path(path).mkdir(parents=True, exist_ok=True)
-        storage_list = self.create_storage_list(path)
-        with open(path+"fd_animation_manifest.json","w") as json_file:
+        if (pathlib.Path(path).is_file()):
+            file = path
+            dir = str(pathlib.Path(file).parent)+"/"
+        else:
+            dir = path
+            file = path+"/fd_animation_manifest.json"
+            pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+        storage_list = self.create_storage_list(dir)
+        with open(file,"w") as json_file:
             json.dump(storage_list, json_file)
 
     def create_storage_list(self,path):
@@ -45,11 +55,17 @@ class Animation:
             storage_list.append({"Filepath": entry[0].save(path+str(id)+".txt"), "Screentime" : entry[1] })
         return storage_list
 
-    def parse_storage_list(self,list):
+    def parse_storage_list(self,list,dir):
         self.image_list = []
         self.init()
         for entry in list:
-            self.image_list.append((Image(entry["Filepath"]),entry["Screentime"]))
+            self.image_list.append((Image(dir+"/"+entry["Filepath"]),entry["Screentime"]))
+
+    def get_entry(self,id=0):
+        return self.image_list[id]
+
+    def set_entry(self,entry,id):
+        self.image_list[id] = entry
 
     def to_string(self):
         #if we want to send an Animation in completly serialized format
@@ -98,8 +114,8 @@ if __name__ == "__main__":
     image,time = animation.getframe()
     print(time)
     image.show()
-    animation.store("default_animation/")
-    animation.load("default_animation/")
+    animation.store("default_animation")
+    animation.load("default_animation")
     image,time = animation.getframe()
     print(time)
     image.show()

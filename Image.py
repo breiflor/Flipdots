@@ -124,10 +124,10 @@ class Image:
         suf = pathlib.Path(imagepath).suffix
         if(suf == ".png"):
             self.save_image(imagepath)
-            return imagepath
+            return pathlib.Path(imagepath).name
         elif(suf == ".txt"):
             self.save_txt(imagepath)
-            return imagepath
+            return pathlib.Path(imagepath).name
         else:
             print("Wrong Type saving Image Data to "+ imagepath +" (only .png and .txt supported)")
 
