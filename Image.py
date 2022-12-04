@@ -79,13 +79,13 @@ class Image:
         val = np.matmul((row.reshape(1,7)),(np.array([64,32,16,8,4,2,1]).reshape(7,1)))
         return val[0][0].item()
 
-    def show(self,original=False,scale_to_px=500):
+    def show(self,original=False,scale_to_px=500,time = 0):
         img  = np.zeros((28,28))
         img = img+self.data
         if(not original):
             img = cv2.resize(img,(scale_to_px, scale_to_px), interpolation = cv2.INTER_AREA)
         cv2.imshow("Image - scaled to "+str(scale_to_px)+" px", img)
-        cv2.waitKey(0)
+        cv2.waitKey(time)
         cv2.destroyAllWindows()
 
     def load_txt(self, filepath="image.txt"):

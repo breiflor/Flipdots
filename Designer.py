@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from Image import *
 from Animation import *
@@ -12,10 +13,12 @@ class Designer:
         self.file = None
         self.image = Image()
         self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout())
-        self.event_loop()
         self.animation = None
         self.time = -1
         self.current_frame_id = 0
+        self.playing = False
+        self.event_loop()
+
 
 
     def generate_layout(self):
@@ -30,7 +33,6 @@ class Designer:
                 sg.Button(sg.SYMBOL_RIGHT_ARROWHEAD, key='-NEXT-',  button_color=sg.theme_background_color(), border_width=0),
                 sg.Input('TIME',size=(5, 1),enable_events=True, key="-TIME-"),
                 sg.Text("s"),
-                #TODO add play and back and forward button here (gray out if only image is loaded)
             ],
             [
                 self.build_button_map(),
@@ -75,7 +77,13 @@ class Designer:
             elif event == "-PREV-":
                 self.prev_image()
             elif event == "-PLAY-":
-                pass
+                if(self.playing is False):
+                    self.playing = True
+                    self.window["-PLAY-"].update(sg.SYMBOL_SQUARE)
+                    self.play()
+                else:
+                    self.playing = False
+                    self.window["-PLAY-"].update(sg.SYMBOL_RIGHT)
             elif event == "-NEXT-":
                 self.next_image()
             else:
@@ -122,6 +130,18 @@ class Designer:
 
     def update_time(self):
         self.window["-TIME-"].update(str(self.time))
+
+    def play(self):
+        self.animation.init()
+        while self.playing:
+            image,delay = self.animation.getframe()
+            if(delay > 0):
+                image.show(time=delay*1000)
+            else:
+                image.show(time=2000)
+                break
+        self.playing = False
+        self.window["-PLAY-"].update(sg.SYMBOL_RIGHT)
 
 
 
