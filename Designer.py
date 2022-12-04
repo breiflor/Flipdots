@@ -78,9 +78,11 @@ class Designer:
             elif event == "-PREV-":
                 self.prev_image()
             elif event == "-ADD-":
-                image = Image()
-                print(image.data)
-                self.animation.insert_entry((image,1),self.current_frame_id+1)
+                if self.animation is None :
+                    self.animation = Animation()
+                    self.animation.insert_entry((Image(),1),self.current_frame_id)
+                else:
+                    self.animation.insert_entry((Image(),1),self.current_frame_id+1)
                 self.next_image()
             elif event == "-DEL-":
                 self.animation.delete_entry(self.current_frame_id)
