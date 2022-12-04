@@ -13,7 +13,7 @@ class NumpyArrayEncoder(json.JSONEncoder):
 class Image:
 
     def __init__(self,imagepath=None,data=np.zeros((28,28),dtype=int)):
-        self.data=data  # creates eigen matrix as default image
+        self.data = np.copy(data)  # creates eigen matrix as default image
         if (imagepath is not None):
             self.load(imagepath) # checks if text or picture representation and inits class
 

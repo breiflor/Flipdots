@@ -64,6 +64,12 @@ class Animation:
     def get_entry(self,id=0):
         return self.image_list[id]
 
+    def delete_entry(self,id):
+        del self.image_list[id]
+
+    def insert_entry(self,entry,after_id):
+        self.image_list.insert(after_id,entry)
+
     def set_entry(self,entry,id):
         self.image_list[id] = entry
 
