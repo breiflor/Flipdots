@@ -34,9 +34,9 @@ class Image:
     def setData(self,data):
         self.data = data
 
-    def insert_text(self,text,location=(0,9),scale= 0.8):
+    def insert_text(self,text,location=(0,9),color=255,scale= 0.8):
         cv2.putText(self.data, text=text, org=location,
-                    fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(255,255,255),
+                    fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(color,color,color),
                     thickness=1)
 
     def toggleDot(self,x,y):
@@ -69,6 +69,7 @@ class Image:
             self.data[index] = row
         #this method shifts an image and fills the remaining spots with the specifed value
         self.data = res #maybe a copy is needed here
+        return self
 
     def getData(self):
         return np.copy(self.data)
@@ -139,7 +140,8 @@ class Image:
 if __name__ == "__main__":
     image = Image("image.png")
     image.show()
-    image.insert_text("test",scale=0.8)
+    image.insert_text("test",scale=0.8,color=1)
+
     image.show()
 
 
