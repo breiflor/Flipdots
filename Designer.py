@@ -12,7 +12,7 @@ class Designer:
     def __init__(self):
         self.file = None
         self.image = Image()
-        self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout())
+        self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout(), resizable=True)
         self.animation = None
         self.time = -1
         self.current_frame_id = 0
@@ -141,7 +141,7 @@ class Designer:
 
     def build_button_map(self):
         # writing this out would drastically improve the startup performace - currently not the case cause Im lazy
-        return [[sg.Button(str('0'), size=(2, 1), pad=(0,0), border_width=0, key=(row,col),button_color=('gray', 'black')) for col in range(28)] for row in range(28)]
+        return [[sg.Button(str('0'), size=(2, 1), pad=(0,0), border_width=0, key=(row,col),button_color=('gray', 'black'), expand_x=True, expand_y=True) for col in range(28)] for row in range(28)]
 
     def load_amimation(self, file):
         self.current_frame_id = 0
