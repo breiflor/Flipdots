@@ -11,7 +11,7 @@ class Net_Controller:
         self.mode = None
         self.display = Display()
         self.display.white()
-        animation = Animation("default_animation/")
+        animation = Animation("startup_animation/")
         self.display._play_animation(animation)
         animation = Animation("Adventskranz/")
         self.display._play_animation(animation)
@@ -62,7 +62,7 @@ class Net_Controller:
         self.client.on_message = cb
 
     def shutdown(self):
-        print(os.system("sh /home/breiflor/Flipdot_demo/shutdown.sh"))
+        print(os.system("sh shutdown.sh"))
 
     def live_mode(self,msg):
         print(f"Received 2`{msg.payload.decode()}` from `{msg.topic}` topic")
@@ -105,7 +105,6 @@ class Net_Controller:
     def run_state_machine(self):
         while True:
             self.client.loop()
-            print(self.mode)
             if self.mode == "play_animation" :
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"
