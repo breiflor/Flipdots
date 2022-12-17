@@ -10,6 +10,11 @@ class Net_Controller:
     def __init__(self,broker= 'homeassistant.local',port= 1883,client_id= f'Fliptot watchdog',user= "mqttuser" ,psw = "TODO"):
         self.mode = None
         self.display = Display()
+        self.display.white()
+        animation = Animation("default_animation/")
+        self.display._play_animation(animation)
+        animation = Animation("Adventskranz/")
+        self.display._play_animation(animation)
         self.animation = None
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect

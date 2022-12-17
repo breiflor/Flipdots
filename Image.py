@@ -138,10 +138,8 @@ class Image:
             print("Wrong Type saving Image Data to "+ imagepath +" (only .png and .txt supported)")
 
 if __name__ == "__main__":
-    image = Image("image.png")
-    image.show()
+    image = Image()
     image.insert_text("test",scale=0.8,color=1)
-
     image.show()
 
 
