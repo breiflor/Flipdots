@@ -13,8 +13,8 @@ class Net_Controller:
         self.display.white()
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
-        animation = Animation("Adventskranz/")
-        self.display._play_animation(animation)
+        #animation = Animation("Adventskranz/")
+        #self.display._play_animation(animation)
         self.animation = None
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect
@@ -87,9 +87,12 @@ class Net_Controller:
         #do a switch on the payload
         ##In case of animation
         print(f"Received 6 `{msg.payload.decode()}` from `{msg.topic}` topic")
-        self.animation = Animation(msg.payload.decode())
-        self.animation.init()
-        self.mode = "play_animation"
+        try:
+            self.animation = Animation(msg.payload.decode())
+            self.animation.init()
+            self.mode = "play_animation"
+        except:
+            self.mode = "idle"
         print("set mode")
 
     def clock_mode(self):
