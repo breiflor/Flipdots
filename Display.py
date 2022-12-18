@@ -37,8 +37,6 @@ class Display:
                 break
 
     def play_animation(self,animation):
-        print(time.time())
-        print(self.next_frame)
         if( time.time() > self.next_frame):
             image,delay = animation.getframe()
             self.sendImage(image)

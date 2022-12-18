@@ -26,6 +26,7 @@ class Net_Controller:
         self.subcribe("Flipdot/add_image",self.callback)
         self.subcribe("Flipdot/remove",self.callback)
         self.subcribe("Flipdot/play",self.callback)
+        self.subcribe("Flipdot/play_loop",self.callback)
         self.subcribe("Flipdot/clock",self.callback)
         self.subcribe("Flipdot/music",self.callback)
         self.run_state_machine()
@@ -51,6 +52,8 @@ class Net_Controller:
             self.remove_asset(msg)
         elif (msg.topic == "Flipdot/play"):
             self.play(msg)
+        elif (msg.topic == "Flipdot/play_loop"):
+            self.play_loop(msg)
         elif (msg.topic == "Flipdot/clock"):
             self.clock_mode()
         elif (msg.topic == "Flipdot/music"):
@@ -95,6 +98,19 @@ class Net_Controller:
             self.mode = "idle"
         print("set mode")
 
+    def play_loop(self,msg):
+        #plays asset name
+        #do a switch on the payload
+        ##In case of animation
+        print(f"Received 6 `{msg.payload.decode()}` from `{msg.topic}` topic")
+        try:
+            self.animation = Animation(msg.payload.decode(),True)
+            self.animation.init(True)
+            self.mode = "play_animation"
+        except:
+            self.mode = "idle"
+        print("set mode")
+
     def clock_mode(self):
         #displays the time
         print("clock mode")
@@ -107,7 +123,7 @@ class Net_Controller:
 
     def run_state_machine(self):
         while True:
-            self.client.loop()
+            self.client.loop(0.1)
             if self.mode == "play_animation" :
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"

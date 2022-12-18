@@ -100,7 +100,7 @@ class Animation:
             self.current_index += 1
             return touple
         else:
-            if(self.loop):
+            if self.loop :
                 self.current_index = 0
                 return touple
             else:
