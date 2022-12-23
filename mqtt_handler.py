@@ -15,8 +15,6 @@ class Net_Controller:
         self.display.white()
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
-        #animation = Animation("Adventskranz/")
-        #self.display._play_animation(animation)
         self.animation = None
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect
