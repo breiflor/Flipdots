@@ -70,7 +70,13 @@ class Net_Controller:
         print(os.system("sh shutdown.sh"))
 
     def live_mode(self,msg):
-        print(f"Received 2`{msg.payload.decode()}` from `{msg.topic}` topic")
+        try:
+            image = Image()
+            image.from_string(msg.payload.decode())
+            self.display.sendImage()
+        except:
+            pass
+        self.mode = "idle"
 
     def add_animation(self,msg):
         #stores a new animation
