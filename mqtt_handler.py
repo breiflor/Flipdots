@@ -1,6 +1,7 @@
 import time
 import os
 import json
+from pathlib import Path
 
 from paho.mqtt import client as mqtt_client
 from Display import *
@@ -29,6 +30,7 @@ class Net_Controller:
         self.subcribe("Flipdot/play_loop",self.callback)
         self.subcribe("Flipdot/clock",self.callback)
         self.subcribe("Flipdot/music",self.callback)
+        self.subcribe("Flipdot/get_assets",self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -58,6 +60,8 @@ class Net_Controller:
             self.clock_mode()
         elif (msg.topic == "Flipdot/music"):
             self.music_mode()
+        elif (msg.topic == "Flipdot/get_assets"):
+            self.push_assets()
 
 
     def subcribe(self,topic,cb):
@@ -134,8 +138,25 @@ class Net_Controller:
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"
 
+    def push_assets(self):
+        animations = []
+        images = []
+        for asset in Path().absolute().iterdir():
+            if asset.suffix == ".txt" or asset.suffix == ".png":
+                images.append(asset.name)
+            if asset.is_dir() and not self.blacklisted(asset.name):
+                animations.append(asset.name)
 
+        data = {"Animations": animations, "Images" : images}
+        datastring = json.dumps(data)
+        self.client.publish("Flipdot/assets",datastring)
 
+    def blacklisted(self, name):
+        #ignores Special folders during the search for animations
+        if name == "__pycache__" or name == ".idea" or name == ".git":
+            return True
+        else
+            return False
 
 
 if __name__ == '__main__':

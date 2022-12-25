@@ -7,6 +7,8 @@ class mqtt_designer:
 
     def __init__(self,broker= 'homeassistant.local',port= 1883,client_id= f'Fliptot designer',settings = "mqtt_config.cfg"):
         data = json.load(open(settings))
+        self.animations = []
+        self.images = []
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect
         self.client.username_pw_set(data["user"], data["password"])
@@ -34,5 +36,9 @@ class mqtt_designer:
         self.client.publish("Flipdot/get_assets")
 
     def callback(self,client,userdata,msg):
-        #TODO define Format and process it accordingly
+        #images and animations get updated here - TODO add to on connect
         print(msg.msg.payload.decode())
+        data = json.loads(msg.msg.payload.decode())
+        self.animations = data["Animations"]
+        self.images = data["Images"]
+
