@@ -5,12 +5,14 @@ from Image import *
 from Animation import *
 import numpy as np
 import PySimpleGUI as sg
-
+from mqtt_designer import *
 
 class Designer:
 
     def __init__(self):
+        self.connector = None
         self.file = None
+        self.live_mode = False
         self.image = Image()
         self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout(), resizable=True)
         self.animation = None
@@ -41,6 +43,7 @@ class Designer:
                 self.build_button_map(),
                 sg.Button('Save', button_color=('white', 'blue')),
                 sg.Text("Please select a file to work with",key="-SAVE-"),
+                sg.Button('Connect', button_color=('white', 'red'))
             ],
         ]
         return layout
@@ -107,6 +110,13 @@ class Designer:
                     self.window["-PLAY-"].update(sg.SYMBOL_RIGHT)
             elif event == "-NEXT-":
                 self.next_image()
+            elif event == "Connect":
+                if not self.live_mode:
+                    self.window["-SAVE-"].update("Connected to Panel")
+                    self.start_live_mode()
+                else:
+                    self.window["-SAVE-"].update("Disconnected")
+                    self.live_mode = False
             else:
                 self.image.toggleDot(event[0],event[1])
                 self.refresh_image()
@@ -132,6 +142,8 @@ class Designer:
     def refresh_image(self):
         field = self.image.getData()
         self.update_time()
+        if self.live_mode :
+            self.connector.send_image(self.image)
         for i,col in enumerate(field):
             for j,element in enumerate(col):
                 if(element > 0):
@@ -157,12 +169,29 @@ class Designer:
         while self.playing:
             image,delay = self.animation.getframe()
             if(delay > 0):
-                image.show(time=delay*1000)
+                if self.live_mode:
+                    self.connector.send_image(self.image)
+                else:
+                    image.show(time=delay*1000)
             else:
-                image.show(time=2000)
+                if self.live_mode:
+                    self.connector.send_image(self.image)
+                else:
+                    image.show(time=2000)
                 break
         self.playing = False
         self.window["-PLAY-"].update(sg.SYMBOL_RIGHT)
+
+    def start_live_mode(self):
+        self.live_mode = True
+        try:
+            self.connector = mqtt_designer()
+            self.window["Connect"].update("Disconnect")
+        except:
+            self.live_mode = False
+            self.window["-SAVE-"].update("Error no Connection Possible")
+
+
 
 
 
