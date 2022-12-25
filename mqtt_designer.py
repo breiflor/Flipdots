@@ -18,15 +18,21 @@ class mqtt_designer:
 
     def on_connect(self):
         print("connected to broker")
+        self.client.subscribe("Flipdot/assets")
+        self.client.on_message = self.callback
 
     def send_image(self,image):
-        pass
+        self.client.publish("Flipdot/add_image", image.to_string())
 
     def display_image(self,image):
-        pass
+        self.client.publish("Flipdot/live", image.to_string())
 
     def send_animation(self,animation):
-        pass
+        self.client.publish("Flipdot/add_ani",animation.to_string())
 
-    def get_installed_animations(self):
-        pass
+    def get_installed_assets(self):
+        self.client.publish("Flipdot/get_assets")
+
+    def callback(self,client,userdata,msg):
+        #TODO define Format and process it accordingly
+        print(msg.msg.payload.decode())

@@ -71,7 +71,7 @@ class Net_Controller:
         try:
             image = Image()
             image.from_string(msg.payload.decode())
-            self.display.sendImage()
+            self.display.sendImage(image)
         except:
             pass
         self.mode = "idle"
