@@ -22,6 +22,7 @@ class mqtt_designer:
         print("connected to broker")
         self.client.subscribe("Flipdot/assets")
         self.client.on_message = self.callback
+        self.refresh_installed_assets()
 
     def send_image(self,image):
         self.client.publish("Flipdot/add_image", image.to_string())
@@ -32,12 +33,13 @@ class mqtt_designer:
     def send_animation(self,animation):
         self.client.publish("Flipdot/add_ani",animation.to_string())
 
-    def get_installed_assets(self):
+    def refresh_installed_assets(self):
         self.client.publish("Flipdot/get_assets")
 
+    def get_assets(self):
+        return self.animations,self.images
+
     def callback(self,client,userdata,msg):
-        #images and animations get updated here - TODO add to on connect
-        print(msg.msg.payload.decode())
         data = json.loads(msg.msg.payload.decode())
         self.animations = data["Animations"]
         self.images = data["Images"]
