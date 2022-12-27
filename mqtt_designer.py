@@ -18,7 +18,7 @@ class mqtt_designer:
     def __del__(self):
         self.client.loop_stop()
 
-    def on_connect(self):
+    def on_connect(self,client, userdata, flags, rc):
         print("connected to broker")
         self.client.subscribe("Flipdot/assets")
         self.client.on_message = self.callback
@@ -40,7 +40,7 @@ class mqtt_designer:
         return self.animations,self.images
 
     def callback(self,client,userdata,msg):
-        data = json.loads(msg.msg.payload.decode())
+        data = json.loads(msg.payload.decode())
         self.animations = data["Animations"]
         self.images = data["Images"]
 

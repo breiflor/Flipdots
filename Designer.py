@@ -143,7 +143,7 @@ class Designer:
         field = self.image.getData()
         self.update_time()
         if self.live_mode :
-            self.connector.send_image(self.image)
+            self.connector.display_image(self.image)
         for i,col in enumerate(field):
             for j,element in enumerate(col):
                 if(element > 0):
@@ -170,12 +170,12 @@ class Designer:
             image,delay = self.animation.getframe()
             if(delay > 0):
                 if self.live_mode:
-                    self.connector.send_image(self.image)
+                    self.connector.display_image(image)
                 else:
                     image.show(time=delay*1000)
             else:
                 if self.live_mode:
-                    self.connector.send_image(self.image)
+                    self.connector.display_image(image)
                 else:
                     image.show(time=2000)
                 break

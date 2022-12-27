@@ -155,7 +155,7 @@ class Net_Controller:
         #ignores Special folders during the search for animations
         if name == "__pycache__" or name == ".idea" or name == ".git":
             return True
-        else
+        else :
             return False
 
 
