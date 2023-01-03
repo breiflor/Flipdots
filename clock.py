@@ -21,17 +21,11 @@ class Clock:
         m = datetime.datetime.now().minute
         s = datetime.datetime.now().second
         h = self.numgen.get_image(h)
-        h.show()
         h.shift_and_fill(3,10)
-        h.show()
         m = self.numgen.get_image(m)
-        m.show()
         m.shift_and_fill(11,10)
-        m.show()
         s = self.numgen.get_image(s)
-        s.show()
         s.shift_and_fill(20,10)
-        s.show()
         return s+h+m
 
 if __name__ == "__main__":

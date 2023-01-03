@@ -19,9 +19,5 @@ class NumberGenerator:
 if __name__ == "__main__":
     gen = NumberGenerator("numbers/numbers.json")
     gen.get_image(1287).show()
-    gen.get_image(1287).show()
-    gen.get_image(1287).show()
-    gen.get_image(1287).show()
-    gen.get_image(1287).show()
-    gen.get_image(1287).show()
+
 
