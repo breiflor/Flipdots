@@ -23,15 +23,15 @@ class Clock:
         hi = self.numgen.get_image(h)
         hi.shift_and_fill(3,10)
         if(h<10):
-            hi.shift_and_fill(0,4)
+            hi.shift_and_fill(0,5)
         mi = self.numgen.get_image(m)
         mi.shift_and_fill(11,10)
         if(m<10):
-            mi.shift_and_fill(0,4)
+            mi.shift_and_fill(0,5)
         si = self.numgen.get_image(s)
         si.shift_and_fill(19,10)
         if(s<10):
-            si.shift_and_fill(0,4)
+            si.shift_and_fill(0,5)
         return si+hi+mi
 
 if __name__ == "__main__":
