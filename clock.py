@@ -11,7 +11,7 @@ class Clock:
         self.background = background_animation
         self.time_between_frames = time_between_frames
         if(design == "digital"):
-            self.numgen = NumberGenerator("numbers/numbers.json")
+            self.numgen = NumberGenerator("numbers/numbers.json",2)
 
     def getframe(self):
         return self.generate_image(),self.time_between_frames
@@ -20,13 +20,19 @@ class Clock:
         h = datetime.datetime.now().hour
         m = datetime.datetime.now().minute
         s = datetime.datetime.now().second
-        h = self.numgen.get_image(h)
-        h.shift_and_fill(3,10)
-        m = self.numgen.get_image(m)
-        m.shift_and_fill(11,10)
-        s = self.numgen.get_image(s)
-        s.shift_and_fill(20,10)
-        return s+h+m
+        hi = self.numgen.get_image(h)
+        hi.shift_and_fill(3,10)
+        if(h<10):
+            hi.shift_and_fill(0,4)
+        mi = self.numgen.get_image(m)
+        mi.shift_and_fill(11,10)
+        if(m<10):
+            mi.shift_and_fill(0,4)
+        si = self.numgen.get_image(s)
+        si.shift_and_fill(19,10)
+        if(s<10):
+            si.shift_and_fill(0,4)
+        return si+hi+mi
 
 if __name__ == "__main__":
     clock = Clock()
