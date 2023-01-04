@@ -5,6 +5,7 @@ from pathlib import Path
 
 from paho.mqtt import client as mqtt_client
 from Display import *
+from clock import *
 
 
 class Net_Controller:
@@ -123,8 +124,7 @@ class Net_Controller:
 
     def clock_mode(self):
         #displays the time
-        print("clock mode")
-        pass
+        self.mode = "clock"
 
     def music_mode(self):
         #displays artwork and progress bar
@@ -137,6 +137,8 @@ class Net_Controller:
             if self.mode == "play_animation" :
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"
+            elif self.mode == "clock":
+                self.display.play_animation(Clock())
 
     def push_assets(self):
         animations = []
