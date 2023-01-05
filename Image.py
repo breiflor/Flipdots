@@ -38,6 +38,7 @@ class Image:
         cv2.putText(self.data, text=text, org=location,
                     fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(color,color,color),
                     thickness=1)
+        return self
 
     def toggleDot(self,x,y):
         if self.data[x][y] > 0:
