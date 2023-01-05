@@ -15,6 +15,7 @@ class Net_Controller:
         self.mode = None
         self.display = Display()
         self.display.white()
+        self.clock = None
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
         self.animation = None
@@ -58,7 +59,7 @@ class Net_Controller:
         elif (msg.topic == "Flipdot/play_loop"):
             self.play_loop(msg)
         elif (msg.topic == "Flipdot/clock"):
-            self.clock_mode()
+            self.clock_mode(msg)
         elif (msg.topic == "Flipdot/music"):
             self.music_mode()
         elif (msg.topic == "Flipdot/get_assets"):
@@ -122,8 +123,9 @@ class Net_Controller:
             self.mode = "idle"
         print("set mode")
 
-    def clock_mode(self):
+    def clock_mode(self,msg):
         #displays the time
+        self.clock(design= msg.payload.decode())
         self.mode = "clock"
 
     def music_mode(self):
@@ -138,7 +140,7 @@ class Net_Controller:
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"
             elif self.mode == "clock":
-                self.display.play_animation(Clock())
+                self.display.play_animation(self.clock)
 
     def push_assets(self):
         animations = []
