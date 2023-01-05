@@ -125,7 +125,7 @@ class Net_Controller:
 
     def clock_mode(self,msg):
         #displays the time
-        self.clock(design= msg.payload.decode())
+        self.clock= Clock(design= msg.payload.decode())
         self.mode = "clock"
 
     def music_mode(self):

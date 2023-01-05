@@ -15,7 +15,7 @@ class Clock:
             self.numgen = NumberGenerator("numbers/numbers.json",2)
         elif self.design == "digital":
             self.numgen = NumberGenerator("numbers/numbers.json",2)
-            self.static = Image().insert_text("-",(13,14),scale=0.1)
+            self.static = Image("dot.txt")
 
     def getframe(self):
         return self.generate_image(),self.time_between_frames
