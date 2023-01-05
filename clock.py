@@ -65,7 +65,7 @@ class Clock:
 
     def image_analog(self,h,m):
         big = h%12
-        small = int(m/5)
+        small = int(round(m/5,0))
         return self.numgen.get_entry(1+small*2)[0] + self.static + self.numgen.get_entry(2+big*2)[0]
 
 if __name__ == "__main__":
