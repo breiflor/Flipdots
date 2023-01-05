@@ -52,6 +52,9 @@ class Clock:
             hi.shift_and_fill(0,5)
         mi = self.numgen.get_image(m)
         mi.shift_and_fill(11,17)
+        if(m<10):
+            mi.shift_and_fill(0,5)
+            mi += self.numgen.get_image(0).shift_and_fill(11,17)
         return hi + mi + self.static
 
 
