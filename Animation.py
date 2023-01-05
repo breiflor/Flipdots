@@ -1,7 +1,7 @@
 import pathlib
 from Image import *
 import json
-
+import copy
 
 class Animation:
 
@@ -62,7 +62,7 @@ class Animation:
             self.image_list.append((Image(dir+"/"+entry["Filepath"]),entry["Screentime"]))
 
     def get_entry(self,id=0):
-        return self.image_list[id]
+        return copy.deepcopy(self.image_list[id])
 
     def delete_entry(self,id):
         del self.image_list[id]

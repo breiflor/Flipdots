@@ -34,10 +34,11 @@ class Image:
     def setData(self,data):
         self.data = data
 
-    def insert_text(self,text,location=(0,9),color=255,scale= 0.8):
+    def insert_text(self,text,location=(0,9),color=250,scale= 0.8):
         cv2.putText(self.data, text=text, org=location,
                     fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(color,color,color),
                     thickness=1)
+        return self
 
     def toggleDot(self,x,y):
         if self.data[x][y] > 0:

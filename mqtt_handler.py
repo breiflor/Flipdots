@@ -5,6 +5,7 @@ from pathlib import Path
 
 from paho.mqtt import client as mqtt_client
 from Display import *
+from clock import *
 
 
 class Net_Controller:
@@ -14,6 +15,7 @@ class Net_Controller:
         self.mode = None
         self.display = Display()
         self.display.white()
+        self.clock = None
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
         self.animation = None
@@ -57,7 +59,7 @@ class Net_Controller:
         elif (msg.topic == "Flipdot/play_loop"):
             self.play_loop(msg)
         elif (msg.topic == "Flipdot/clock"):
-            self.clock_mode()
+            self.clock_mode(msg)
         elif (msg.topic == "Flipdot/music"):
             self.music_mode()
         elif (msg.topic == "Flipdot/get_assets"):
@@ -121,10 +123,10 @@ class Net_Controller:
             self.mode = "idle"
         print("set mode")
 
-    def clock_mode(self):
+    def clock_mode(self,msg):
         #displays the time
-        print("clock mode")
-        pass
+        self.clock= Clock(design= msg.payload.decode())
+        self.mode = "clock"
 
     def music_mode(self):
         #displays artwork and progress bar
@@ -137,6 +139,8 @@ class Net_Controller:
             if self.mode == "play_animation" :
                if not self.display.play_animation(self.animation):
                     self.mode = "idle"
+            elif self.mode == "clock":
+                self.display.play_animation(self.clock)
 
     def push_assets(self):
         animations = []
