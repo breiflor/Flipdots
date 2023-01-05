@@ -16,6 +16,9 @@ class Clock:
         elif self.design == "digital":
             self.numgen = NumberGenerator("numbers/numbers.json",2)
             self.static = Image("dot.txt")
+        elif self.design == "analog":
+            self.numgen = Animation("analog_clock/handle.json")
+            self.static = self.numgen.get_entry(0)[0]
 
     def getframe(self):
         return self.generate_image(),self.time_between_frames
@@ -29,6 +32,8 @@ class Clock:
             return self.image_modern_digital(h,m,s)
         elif self.design == "digital":
             return self.image_digital(h,m)
+        elif self.design == "analog":
+            return self.image_analog(h,m)
 
     def image_modern_digital(self,h,m,s):
         hi = self.numgen.get_image(h)
@@ -58,15 +63,20 @@ class Clock:
         return hi + mi + self.static
 
 
+    def image_analog(self,h,m):
+        big = h%12
+        small = int(m/5)
+        return self.numgen.get_entry(1+small*2)[0] + self.static + self.numgen.get_entry(2+big*2)[0]
+
 if __name__ == "__main__":
-    clock = Clock()
+    clock = Clock(design="analog")
     #while True:
     #    clock.generate_image().show()
-    clock.image_digital(12,10).show()
-    clock.image_digital(12,20).show()
-    clock.image_digital(2,20).show()
-    clock.image_digital(2,7).show()
-    clock.image_digital(2,1).show()
-    clock.image_digital(1,1).show()
-    clock.image_digital(22,7).show()
-    clock.image_digital(22,30).show()
+    clock.image_analog(12,10).show()
+    clock.image_analog(12,20).show()
+    clock.image_analog(2,20).show()
+    clock.image_analog(2,7).show()
+    clock.image_analog(2,1).show()
+    clock.image_analog(1,1).show()
+    clock.image_analog(22,7).show()
+    clock.image_analog(22,30).show()
