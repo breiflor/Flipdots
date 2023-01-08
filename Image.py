@@ -138,9 +138,20 @@ class Image:
         else:
             print("Wrong Type saving Image Data to "+ imagepath +" (only .png and .txt supported)")
 
+    def from_frame(self,frame):
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        img = gray[40:440,120:520]
+        img = cv2.resize(img,(56, 56), interpolation = cv2.INTER_AREA)
+        img = cv2.GaussianBlur(img, (3,3), 0)
+        img = cv2.Canny(image=img, threshold1=100, threshold2=200)
+        img = cv2.resize(img,(28, 28), interpolation = cv2.INTER_AREA)
+        self.data = img
+
 if __name__ == "__main__":
     image = Image()
-    image.insert_text("test",scale=0.8,color=1)
-    image.show()
-
+    cap = cv2.VideoCapture(0)
+    while True:
+        image.from_frame(frame = cap.read()[1])
+        image.show()
+     
 
