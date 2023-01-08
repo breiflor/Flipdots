@@ -1,5 +1,7 @@
 import copy
 import datetime
+import time
+
 import cv2
 
 from Image import *
@@ -25,7 +27,7 @@ class Live_mode:
             ret, frame = self.cap.read()
             image = Image()
             image.from_frame(frame)# Read image from capture device (camera)
-            self.connector.send_image()
+            self.connector.display_image(image)
             imgbytes=cv2.imencode('.png', frame)[1].tobytes()   # Convert the image to PNG Bytes
             self.window['-IMAGE-'].update(data=imgbytes)   # Change the Image Element to show the new image
 
