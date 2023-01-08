@@ -34,9 +34,9 @@ class Image:
     def setData(self,data):
         self.data = data
 
-    def insert_text(self,text,location=(0,9),color=250,scale= 0.8):
+    def insert_text(self,text,location=(0,9),scale= 0.8):
         cv2.putText(self.data, text=text, org=location,
-                    fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(color,color,color),
+                    fontFace= cv2.FONT_HERSHEY_PLAIN, fontScale=scale, color=(1,1,1),
                     thickness=1)
         return self
 
@@ -143,9 +143,14 @@ class Image:
         img = gray[40:440,120:520]
         img = cv2.resize(img,(56, 56), interpolation = cv2.INTER_AREA)
         img = cv2.GaussianBlur(img, (3,3), 0)
-        img = cv2.Canny(image=img, threshold1=100, threshold2=200)
+        img = cv2.Canny(image=img, threshold1=100, threshold2=200,)
         img = cv2.resize(img,(28, 28), interpolation = cv2.INTER_AREA)
-        self.data = img
+        for x,row in enumerate(img):
+            for y,element in enumerate(row):
+                if(element == 0):
+                    self.data[x][y] = int(0)
+                else:
+                    self.data[x][y] = int(1)
 
 if __name__ == "__main__":
     image = Image()
@@ -153,5 +158,5 @@ if __name__ == "__main__":
     while True:
         image.from_frame(frame = cap.read()[1])
         image.show()
-     
+
 
