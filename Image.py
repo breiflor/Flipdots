@@ -138,12 +138,12 @@ class Image:
         else:
             print("Wrong Type saving Image Data to "+ imagepath +" (only .png and .txt supported)")
 
-    def from_frame(self,frame):
+    def from_frame(self,frame,min=100,max=200,size=400):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        img = gray[40:440,120:520]
+        img = gray[int((480-size)/2):int((480-size)/2+size),int((840-size)/2):int((640-size)/2+size)]
         img = cv2.resize(img,(56, 56), interpolation = cv2.INTER_AREA)
         img = cv2.GaussianBlur(img, (3,3), 0)
-        img = cv2.Canny(image=img, threshold1=100, threshold2=200,)
+        img = cv2.Canny(image=img, threshold1=min, threshold2=max,)
         img = cv2.resize(img,(28, 28), interpolation = cv2.INTER_AREA)
         for x,row in enumerate(img):
             for y,element in enumerate(row):
