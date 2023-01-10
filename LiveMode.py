@@ -14,9 +14,9 @@ class Live_mode:
 
     def __init__(self):
         self.layout = [[sg.Image(filename='', key='-IMAGE-'),[sg.Image(filename='', key='-RAW-')]],
-                       [sg.Slider(range=(0,250), key='min', default_value=100, size=(40,15), orientation='horizontal')],
-                        [sg.Slider(range=(0,250),  key='max',default_value=200, size=(40,15), orientation='horizontal')],
-                        [sg.Slider(range=(1, 479),  key='size', default_value=400, size=(40, 15), orientation='horizontal')],
+                       [sg.Slider(range=(0,250), key='min', default_value=100, size=(20,15), orientation='horizontal')],
+                        [sg.Slider(range=(0,250),  key='max',default_value=200, size=(20,15), orientation='horizontal')],
+                        [sg.Slider(range=(1, 479),  key='size', default_value=400, size=(20, 15), orientation='horizontal')],
                         [sg.Button("Play", key='-PLAY-',  button_color=sg.theme_background_color(), border_width=0),sg.Button("Save", key='-SAVE-',  button_color=sg.theme_background_color(), border_width=0)]]
         self.window = sg.Window('Demo Application - OpenCV Integration', self.layout, location=(800,400),
                            no_titlebar=False, grab_anywhere=True)  # if trying Qt, you will need to remove this right click menu
