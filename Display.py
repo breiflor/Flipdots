@@ -62,8 +62,9 @@ class Display:
         self.send_message(image.getPanel(3),0x03)
 
 if __name__ == "__main__":
-    display = Display(False)
+    display = Display(True)
     image = Image()
+    image.insert_text("test")
     display.sendImage(image)
     animation = Animation("default_animation/")
     display._play_animation(animation)
