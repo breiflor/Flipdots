@@ -152,11 +152,34 @@ class Image:
                 else:
                     self.data[x][y] = int(1)
 
+class Textgen:
+
+    def __init__(self,text,x=0,y=9,shift=1,scale = 0.8,factor =6.5):
+        self.text = text
+        self.scale = scale
+        self.x = x
+        self.y = y
+        self.shift = shift
+        self.factor = factor #describes how much x space a font needs
+
+    def get_image(self):
+        img = Image()
+        img.insert_text(self.text,(self.x,self.y),scale=self.scale)
+        self.x -= self.shift
+        if 0 > self.text.__len__()*self.scale*self.factor +self.x :
+            self.x = 0
+        return img
+
+    def get_text(self):
+        text = self.text[self.current_frame*self.size:self.current_frame*self.size+(self.size)]+self.end
+        #self.current_frame = (self.current_frame+1) % self.frames
+        return text
+
+
 if __name__ == "__main__":
-    image = Image()
-    cap = cv2.VideoCapture(0)
+    txt = Textgen("youre not special",scale=0.6)
     while True:
-        image.from_frame(frame = cap.read()[1])
-        image.show()
+        txt.get_image().show()
+
 
 
