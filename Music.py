@@ -2,20 +2,22 @@ import datetime
 import time
 
 from Image import *
+from Animation import *
 
 class Music:
 
     def __init__(self):
         self.title = "Wating for Playback"
-        self.duration = 0
+        self.duration = 1
         self.due = 0
         self.pose = 0
         self.playing = False
         self.txt = Textgen(self.title, 0, 20)
+        self.progessbar = Animation("progressbar")
 
     def getframe(self):
         img = self.generate_image()
-        return img,1
+        return img,0.5 #refresh rate
 
     def enter_infos(self,dict):
         data = json.loads(dict)
@@ -37,11 +39,15 @@ class Music:
         return img
 
     def create_progress_bar(self):
-        return Image()
+        progress = 1-(self.due - time.time())/self.duration
+        segments = round(27*progress,0)
+        img = self.progessbar.get_entry(int(segments))[0]
+        return img
 
 
 if __name__ == "__main__":
     music = Music()
+    music.enter_infos("{\"status\":\"True\",\"title\":\"test\",\"duration\":60,\"pose\":5}")
     while True:
         music.getframe()[0].show()
 
