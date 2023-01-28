@@ -147,7 +147,7 @@ class Net_Controller:
             elif self.mode == "clock":
                 self.display.play_animation(self.clock)
             if self.mode == "music":
-                self.display.play_animation(self.animation)
+                self.display.play_animation(self.music)
 
     def push_assets(self):
         animations = []

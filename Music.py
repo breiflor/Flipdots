@@ -17,7 +17,7 @@ class Music:
 
     def getframe(self):
         img = self.generate_image()
-        return img,0.5 #refresh rate
+        return img,0.3 #refresh rate
 
     def enter_infos(self,dict):
         data = json.loads(dict)
@@ -40,7 +40,9 @@ class Music:
 
     def create_progress_bar(self):
         progress = 1-(self.due - time.time())/self.duration
-        segments = round(27*progress,0)
+        segments = round(26*progress,0)
+        if progress > 1 : 
+            segments = 26
         img = self.progessbar.get_entry(int(segments))[0]
         return img
 
