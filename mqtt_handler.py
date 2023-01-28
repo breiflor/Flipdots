@@ -6,6 +6,7 @@ from pathlib import Path
 from paho.mqtt import client as mqtt_client
 from Display import *
 from clock import *
+from Music import *
 
 
 class Net_Controller:
@@ -19,6 +20,7 @@ class Net_Controller:
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
         self.animation = None
+        self.music = None
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect
         self.client.username_pw_set(data["user"],data["password"])
@@ -61,7 +63,7 @@ class Net_Controller:
         elif (msg.topic == "Flipdot/clock"):
             self.clock_mode(msg)
         elif (msg.topic == "Flipdot/music"):
-            self.music_mode()
+            self.music_mode(msg)
         elif (msg.topic == "Flipdot/get_assets"):
             self.push_assets()
 
@@ -128,10 +130,13 @@ class Net_Controller:
         self.clock= Clock(design= msg.payload.decode())
         self.mode = "clock"
 
-    def music_mode(self):
-        #displays artwork and progress bar
-        print("music mode")
-        pass
+    def music_mode(self,msg):
+        if self.mode != "music":
+            self.music = Music()
+            self.music.enter_infos(msg.payload.decode())
+            self.mode = "music"
+        else:
+            self.music.enter_infos(msg.payload.decode())
 
     def run_state_machine(self):
         while True:
@@ -141,6 +146,8 @@ class Net_Controller:
                     self.mode = "idle"
             elif self.mode == "clock":
                 self.display.play_animation(self.clock)
+            if self.mode == "music":
+                self.display.play_animation(self.animation)
 
     def push_assets(self):
         animations = []

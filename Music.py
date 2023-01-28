@@ -48,6 +48,7 @@ class Music:
 if __name__ == "__main__":
     music = Music()
     music.enter_infos("{\"status\":\"True\",\"title\":\"test\",\"duration\":60,\"pose\":5}")
+    # Homeassistant template {"status":"{{is_state("media_player.spotify_mrbreitkopf", "playing")}}","title":"{{state_attr("media_player.spotify_mrbreitkopf","media_title")}}","duration":{{state_attr("media_player.spotify_mrbreitkopf","media_duration")}},"pose":{{state_attr("media_player.spotify_mrbreitkopf","media_position")}}}
     while True:
         music.getframe()[0].show()
 
