@@ -65,22 +65,23 @@ class Live_mode:
                             self.send_note(note)
                         if self.pressed == 0:
                             print("lol")
+                            self.send_note(0)
 
 
     def __del__(self):
         self.window.close()
 
-    def send_note(self, note,offset=1):
-        dots = note +offset
+    def send_note(self, note,offset=6):
+        dots = int((note*offset)%(28*28))
         img = Image()
-        arr = np.zeros((28,28),dtype=int)
-        for x in range(int(round(dots/27,0))):
-            for y in range(int(round((dots % 28),0))):
-                arr[x][y]=1
-        img.setData(arr)
+        arr = np.zeros((28*28,1),dtype=int)
+        for x in range(dots):
+            arr[x] = 1
+        arr = arr.reshape((28,28))
+        if dots != 0 : img.setData(arr)
         self.connector.display_image(img)
 
 
 if __name__ == "__main__":
-    live = Live_mode("midi")
+    live = Live_mode()
     live.loop()
