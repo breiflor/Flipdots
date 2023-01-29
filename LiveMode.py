@@ -54,18 +54,21 @@ class Live_mode:
             if self.mode == "midi":
                 with mido.open_input() as inport:
                     for msg in inport:
-                        note = msg.note
-                        vel = msg.velocity
-                        print(note)
-                        # determine if a note is currently pressed
-                        if vel==0:
-                            self.pressed = self.pressed - 1
-                        else:
-                            self.pressed = self.pressed + 1
-                            self.send_note(note)
-                        if self.pressed == 0:
-                            print("lol")
-                            self.send_note(0)
+                        try:
+                            note = msg.note
+                            vel = msg.velocity
+                            print(note)
+                            # determine if a note is currently pressed
+                            if vel==0:
+                                self.pressed = self.pressed - 1
+                            else:
+                                self.pressed = self.pressed + 1
+                                self.send_note(note)
+                            if self.pressed == 0:
+                                print("lol")
+                                self.send_note(0)
+                        except:
+                            print(msg)
 
 
     def __del__(self):
