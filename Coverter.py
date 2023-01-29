@@ -12,7 +12,7 @@ class Converter:
         self.window = sg.Window(title="Flipdot Creator", layout=self.generate_layout(), resizable=True)
         self.file = None
         self.image = Image()
-        self.settings = None
+        self.animation = Animation()
         self.event_loop()
 
 
@@ -33,7 +33,7 @@ class Converter:
             elif event == "Save-Img":
                 self.image.save(values["-SAVE-"])
             elif event == "Save-Animation":
-                pass
+                self.animation.store(values["-SAVE-"])
 
 
     def generate_layout(self):
@@ -42,6 +42,8 @@ class Converter:
                 sg.FileBrowse(),
                 sg.Button('Convert', button_color=('white', 'blue'))],
                   [sg.Image(filename='', key='-IMAGE-')],
+                  [sg.Slider(range=(1, 60), key='fps', default_value=60, size=(20, 15), orientation='horizontal'),
+                   sg.Text("fps")],
                        [sg.Slider(range=(0,250), key='min', default_value=100, size=(20,15), orientation='horizontal'),sg.Text("min")],
                         [sg.Slider(range=(0,250),  key='max',default_value=200, size=(20,15), orientation='horizontal'),sg.Text("max")],
                         [sg.Slider(range=(1, 479),  key='size', default_value=400, size=(20, 15), orientation='horizontal'),sg.Text("size")],
@@ -59,7 +61,19 @@ class Converter:
         self.window['-IMAGE-'].update(data=imgbytes)
 
     def load_amimation(self, file,values):
-        pass
+        cap = cv2.VideoCapture(file)
+        cnter = values["fps"]
+        while True:
+            sucess,frame = cap.read()
+            if not sucess:
+                break
+            if cnter == values["fps"]:
+                img = Image()
+                img.from_frame(frame,values['min'],values['max'],values['size'])
+                self.animation.insert(img,60/values["fps"])
+                cnter = 0
+            else:
+                cnter = cnter+1
 
 
 if __name__ == "__main__":
