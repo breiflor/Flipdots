@@ -41,12 +41,12 @@ class Converter:
                 sg.In(size=(25, 1), enable_events=True, key="-FILE-"),
                 sg.FileBrowse(),
                 sg.Button('Convert', button_color=('white', 'blue'))],
-                  [sg.Image(filename='', key='-IMAGE-')],
+                  [[sg.Image(filename='', key='-IMAGE-')],
                   [sg.Slider(range=(1, 60), key='fps', default_value=60, size=(20, 15), orientation='horizontal'),
                    sg.Text("fps")],
                        [sg.Slider(range=(0,250), key='min', default_value=100, size=(20,15), orientation='horizontal'),sg.Text("min")],
                         [sg.Slider(range=(0,250),  key='max',default_value=200, size=(20,15), orientation='horizontal'),sg.Text("max")],
-                        [sg.Slider(range=(1, 479),  key='size', default_value=400, size=(20, 15), orientation='horizontal'),sg.Text("size")],
+                        [sg.Slider(range=(1, 479),  key='size', default_value=400, size=(20, 15), orientation='horizontal'),sg.Text("size")]],[sg.Image(filename='', key='-IMAGE-')],
                   [sg.In(size=(25, 1), enable_events=True, key="-SAVE-"),sg.Button('Save-Img', button_color=('white', 'blue')),sg.Button('Save-Animation', button_color=('white', 'blue'))]]
         return layout
 
