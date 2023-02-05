@@ -76,9 +76,17 @@ class Converter:
                 break
             if cnter == values["fps"]:
                 img = Image()
-                img.from_frame(frame,values['min'],values['max'],values['size'])
-                self.animation.insert(img,60/values["fps"])
+                frame  = cv2.resize(frame,(500, 500), interpolation = cv2.INTER_AREA)
+                img.from_frame(frame,values['min'],values['max'],values['size'],False)
+                self.animation.insert(img,values["fps"]/60)
                 cnter = 0
+                imgbytes=cv2.imencode('.png',frame)[1].tobytes()
+                self.window['-RAW-'].update(data=imgbytes)
+                img = np.zeros((28, 28))
+                img = (img + self.image.getData())*250
+                img = cv2.resize(img,(500, 500), interpolation = cv2.INTER_AREA)
+                imgbytes=cv2.imencode('.png',img)[1].tobytes()
+                self.window['-IMAGE-'].update(data=imgbytes)
             else:
                 cnter = cnter+1
 

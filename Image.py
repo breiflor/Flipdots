@@ -92,7 +92,7 @@ class Image:
         if(not original):
             img = cv2.resize(img,(scale_to_px, scale_to_px), interpolation = cv2.INTER_AREA)
         cv2.imshow("Image - scaled to "+str(scale_to_px)+" px", img)
-        cv2.waitKey(time)
+        cv2.waitKey(int(time))
         cv2.destroyAllWindows()
 
     def load_txt(self, filepath="image.txt"):
