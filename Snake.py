@@ -9,7 +9,7 @@ class Snake:
         self.state = "run"
         self.lenght = 3
         self.score = 0
-        self.speed = 1 #time between frames
+        self.speed = 0.5 #time between frames
         self.head = [14,14]
         self.body = [  [14, 14],
                 [13, 14],
@@ -19,7 +19,7 @@ class Snake:
         self.direction = 'RIGHT'
         self.change_to = self.direction
         self.fruit = None
-        self.generate_fruit(s)
+        self.generate_fruit()
 
     def generate_fruit(self):
         self.fruit = [random.randrange(1, 27, 1),
@@ -67,8 +67,8 @@ class Snake:
             image = Image()
             snake = self.body.copy()
             for entry in snake:
-                image.toggleDot(entry[0],entry[1])
-            image.toggleDot(self.fruit[0],self.fruit[1])
+                image.toggleDot(entry[1],entry[0])
+            image.toggleDot(self.fruit[1],self.fruit[0])
             return (image,self.speed)
         else:
              #return Gameover image TODO
