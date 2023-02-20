@@ -2,6 +2,7 @@ import time
 import os
 import json
 from pathlib import Path
+from Snake import *
 
 from paho.mqtt import client as mqtt_client
 from Display import *
@@ -17,6 +18,7 @@ class Net_Controller:
         self.display = Display()
         self.display.white()
         self.clock = None
+        self.game = None
         animation = Animation("startup_animation/")
         self.display._play_animation(animation)
         self.animation = None
@@ -35,6 +37,8 @@ class Net_Controller:
         self.subcribe("Flipdot/clock",self.callback)
         self.subcribe("Flipdot/music",self.callback)
         self.subcribe("Flipdot/get_assets",self.callback)
+        self.subcribe("Flipdot/game", self.callback)
+        self.subcribe("Flipdot/control", self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -66,6 +70,11 @@ class Net_Controller:
             self.music_mode(msg)
         elif (msg.topic == "Flipdot/get_assets"):
             self.push_assets()
+        elif (msg.topic == "Flipdot/game"):
+            self.load_game(msg)
+        elif (msg.topic == "Flipdot/control"):
+            if self.game is not None:
+                self.game.control(msg.payload.decode())
 
 
     def subcribe(self,topic,cb):
@@ -146,8 +155,10 @@ class Net_Controller:
                     self.mode = "idle"
             elif self.mode == "clock":
                 self.display.play_animation(self.clock)
-            if self.mode == "music":
+            elif self.mode == "music":
                 self.display.play_animation(self.music)
+            elif self.mode == "game":
+                self.display.play_animation(self.game)
 
     def push_assets(self):
         animations = []
@@ -168,6 +179,14 @@ class Net_Controller:
             return True
         else :
             return False
+
+    def load_game(self, msg):
+        if(msg.payload.decode() == "snake"):
+            self.game = Snake()
+            self.mode = "game"
+        else:
+            pass #no valid game
+
 
 
 if __name__ == '__main__':
