@@ -158,7 +158,8 @@ class Net_Controller:
             elif self.mode == "music":
                 self.display.play_animation(self.music)
             elif self.mode == "game":
-                self.display.play_animation(self.game)
+                if not self.display.play_animation(self.game):
+                    self.mode = "idle"
 
     def push_assets(self):
         animations = []

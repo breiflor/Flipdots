@@ -10,6 +10,7 @@ class Snake:
         self.lenght = 3
         self.score = 0
         self.speed = 0.5 #time between frames
+        self.max_speed = 0.3
         self.head = [14,14]
         self.body = [  [14, 14],
                 [13, 14],
@@ -29,6 +30,7 @@ class Snake:
                 self.generate_fruit()
 
     def getframe(self):
+        print(self.state)
         if self.state == "run":
             if self.change_to == 'UP' and self.direction != 'DOWN':
                 self.direction = 'UP'
@@ -55,7 +57,9 @@ class Snake:
 
             self.body.insert(0, list(self.head))
             if self.head[0] == self.fruit[0] and self.head[1] == self.fruit[1]:
-                self.score += 10
+                self.score += 1
+                if self.speed > self.max_speed:
+                    self.speed -= self.speed*0.1
                 self.generate_fruit()
             else:
                 self.body.pop()
@@ -63,6 +67,7 @@ class Snake:
             for block in self.body[1:]:
                 if self.head[0] == block[0] and self.head[1] == block[1]:
                     self.game_over()
+                    print("game over")
 
             image = Image()
             snake = self.body.copy()
@@ -72,13 +77,17 @@ class Snake:
             return (image,self.speed)
         else:
              #return Gameover image TODO
-            return (Image(),-1)
+            image = Image()
+            image.insert_text("Game",(0,8),scale=0.6)
+            image.insert_text("over",(1,15),scale=0.7)
+            image.insert_text(str(self.score),(0,26),scale=0.8)
+            return (image,-1)
 
     def control(self,input):
         self.change_to = input
 
     def game_over(self):
-        self.state == "game_over"
+        self.state = "game_over"
 
 if __name__ == "__main__":
     snake = Snake()
