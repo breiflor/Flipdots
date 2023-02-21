@@ -30,7 +30,6 @@ class Snake:
                 self.generate_fruit()
 
     def getframe(self):
-        print(self.state)
         if self.state == "run":
             if self.change_to == 'UP' and self.direction != 'DOWN':
                 self.direction = 'UP'
@@ -67,7 +66,6 @@ class Snake:
             for block in self.body[1:]:
                 if self.head[0] == block[0] and self.head[1] == block[1]:
                     self.game_over()
-                    print("game over")
 
             image = Image()
             snake = self.body.copy()
