@@ -117,7 +117,7 @@ class Net_Controller:
     def remove_asset(self,msg):
         #removes an image from the filesystem
         try:
-            p = Path(msg.paylod.decode())
+            p = Path(msg.payload.decode())
             if p.is_file():
                 p.unlink(missing_ok=True)
             else:
