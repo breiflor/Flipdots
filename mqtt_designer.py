@@ -39,6 +39,28 @@ class mqtt_designer:
     def get_assets(self):
         return self.animations,self.images
 
+    def get_animations(self):
+        return self.animations
+
+    def get_images(self):
+        return self.images
+
+    def get_animation(self,name):
+        #TODO make request
+        print(name)
+        animation = Animation()
+        return animation
+
+    def remove_asset(self,name):
+        print("removing "+str(name))
+        self.client.publish("Flipdot/remove", name)
+
+    def get_image(self,name):
+        #TODO make request
+        print(name)
+        image = Image()
+        return image
+
     def callback(self,client,userdata,msg):
         data = json.loads(msg.payload.decode())
         self.animations = data["Animations"]
