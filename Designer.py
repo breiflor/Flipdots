@@ -84,7 +84,7 @@ class Designer:
                 self.file = values["-FILE-0"]
             elif event == "-TIME-":
                 if(values["-TIME-"]!=""):
-                    self.time = int(values["-TIME-"])
+                    self.time = float(values["-TIME-"])
                     self.update_time()
             elif event == "Load":
                 if self.file is not None:
