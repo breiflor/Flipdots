@@ -39,6 +39,8 @@ class Net_Controller:
         self.subcribe("Flipdot/get_assets",self.callback)
         self.subcribe("Flipdot/game", self.callback)
         self.subcribe("Flipdot/control", self.callback)
+        self.subcribe("Flipdot/get_animation", self.callback)
+        self.subcribe("Flipdot/get_image", self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -75,6 +77,10 @@ class Net_Controller:
         elif (msg.topic == "Flipdot/control"):
             if self.game is not None:
                 self.game.control(msg.payload.decode())
+        elif (msg.topic == "Flipdot/get_image"):
+            self.send_image(msg.payload.decode())
+        elif (msg.topic == "Flipdot/get_animation"):
+            self.send_animation(msg.payload.decode())
 
 
     def subcribe(self,topic,cb):
@@ -95,18 +101,31 @@ class Net_Controller:
 
     def add_animation(self,msg):
         #stores a new animation
-        print(f"Received 3`{msg.payload.decode()}` from `{msg.topic}` topic")
-        pass
+        data = json.loads(msg.payload.decode())
+        ani = Animation()
+        ani.from_string(data["animation"])
+        ani.store(data["name"])
+
 
     def add_image(self,msg):
         #stores a new image
-        print(f"Received 4`{msg.payload.decode()}` from `{msg.topic}` topic")
-        pass
+        data = json.loads(msg.payload.decode())
+        img = Image()
+        img.from_string(data["image"])
+        img.save(data["name"])
 
     def remove_asset(self,msg):
         #removes an image from the filesystem
-        print(f"Received 5`{msg.payload.decode()}` from `{msg.topic}` topic")
-        pass
+        try:
+            p = Path(msg.payload.decode())
+            if p.is_file():
+                p.unlink(missing_ok=True)
+            else:
+                for sub in p.iterdir() :
+                    sub.unlink(missing_ok=True)
+                p.rmdir()
+        except:
+            print("Error during removal")
 
     def play(self,msg):
         #plays asset name
@@ -187,6 +206,12 @@ class Net_Controller:
             self.mode = "game"
         else:
             pass #no valid game
+
+    def send_image(self, name):
+        self.client.publish("Flipdot/download_image",Image(name).to_string())
+
+    def send_animation(self,name):
+        self.client.publish("Flipdot/download_animation",Animation(name).to_string())
 
 
 

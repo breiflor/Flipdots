@@ -1,5 +1,6 @@
 import copy
 import datetime
+import time
 
 from Image import *
 from Animation import *
@@ -14,12 +15,14 @@ class Designer:
         self.file = None
         self.live_mode = False
         self.image = Image()
-        self.window = sg.Window(title="Flipdot Panel Designer", layout=self.generate_layout(), resizable=True)
+        tabgroup = [[sg.TabGroup([[sg.Tab("Desginer",self.generate_layout()),sg.Tab("File Handling",self.generate_file_handling_layout())]])]]
+        self.window = sg.Window("Flipdot Panel Designer", tabgroup, resizable=True)
         self.animation = None
         self.time = -1
         self.current_frame_id = 0
         self.playing = False
         self.event_loop()
+        self.selected = None
 
 
 
@@ -39,13 +42,30 @@ class Designer:
                 sg.Input('TIME',size=(5, 1),enable_events=True, key="-TIME-"),
                 sg.Text("s"),
             ],
+            [sg.Frame("Image",self.build_button_map(),expand_x=True,expand_y=True),],
             [
-                self.build_button_map(),
+
                 sg.Button('Save', button_color=('white', 'blue')),
                 sg.Text("Please select a file to work with",key="-SAVE-"),
                 sg.Button('Connect', button_color=('white', 'red'))
             ],
         ]
+        return layout
+
+    def generate_file_handling_layout(self):
+        self.connector = mqtt_designer() #TODO check if this init causes issues
+        time.sleep(1)
+        print(self.connector.get_animations())
+        layout = [[sg.Text("Load image"),
+                   sg.In(size=(25, 1), enable_events=True, key="-FILE-"),
+                   sg.FileBrowse(),],
+                  [sg.Listbox(values=self.connector.get_animations(),key="animations",enable_events=True,expand_x=True,expand_y=True)],
+                  [sg.Listbox(values=self.connector.get_images(),key="images",enable_events=True,expand_x=True,expand_y=True)],
+                  [sg.Button('del', button_color=('white', 'blue')),
+                  sg.Button('download', button_color=('white', 'blue')),
+                   sg.Button('upload', button_color=('white', 'blue')),],
+                  ]
+
         return layout
 
     def load_image(self,path):
@@ -60,6 +80,8 @@ class Designer:
                 break
             elif event == "-FILE-":
                 self.file = values["-FILE-"]
+            elif event == "-FILE-0":
+                self.file = values["-FILE-0"]
             elif event == "-TIME-":
                 if(values["-TIME-"]!=""):
                     self.time = int(values["-TIME-"])
@@ -117,9 +139,46 @@ class Designer:
                 else:
                     self.window["-SAVE-"].update("Disconnected")
                     self.live_mode = False
+            elif event == "upload":
+                if self.file is not None:
+                    suf = pathlib.Path(self.file).suffix
+                    if(suf == ".json"):
+                        self.load_amimation(self.file)
+                        self.connector.send_animation(self.file,self.animation)
+                    else:
+                        self.load_image(self.file)
+                        self.connector.send_image(self.file,self.image)
+                    self.refresh_asset_list()
+            elif event == "download":
+                if self.selected == "images":
+                    self.image = self.connector.get_image(values["images"][0])
+                    self.refresh_image()
+                elif self.selected == "animation":
+                    self.animation = self.connector.get_animation(values["animations"][0])
+                    self.refresh_image()
+            elif event == "del":
+                if self.selected == "images":
+                    self.image = self.connector.remove_asset(values["images"][0])
+                    self.refresh_asset_list()
+                elif self.selected == "animation":
+                    self.animation = self.connector.remove_asset(values["animations"][0])
+                    self.refresh_asset_list()
+            elif event == "animations":
+                self.selected = "animation"
+            elif event == "images":
+                self.selected = "images"
             else:
-                self.image.toggleDot(event[0],event[1])
-                self.refresh_image()
+                try:
+                    self.image.toggleDot(event[0],event[1])
+                    self.refresh_image()
+                except:
+                    print("not handled event "+str(event)+str(values))
+
+    def refresh_asset_list(self):
+        self.connector.refresh_installed_assets()
+        time.sleep(1)
+        self.window["animations"].update(values=self.connector.get_animations())
+        self.window["images"].update(values=self.connector.get_images())
 
     def prev_image(self):
         self.animation.set_entry((copy.deepcopy(self.image), self.time), self.current_frame_id)
