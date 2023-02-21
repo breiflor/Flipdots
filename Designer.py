@@ -152,8 +152,10 @@ class Designer:
             elif event == "download":
                 if self.selected == "images":
                     self.image = self.connector.get_image(values["images"][0])
+                    self.refresh_image()
                 elif self.selected == "animation":
                     self.animation = self.connector.get_animation(values["animations"][0])
+                    self.refresh_image()
             elif event == "del":
                 if self.selected == "images":
                     self.image = self.connector.remove_asset(values["images"][0])

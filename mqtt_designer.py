@@ -38,7 +38,7 @@ class mqtt_designer:
         self.client.publish("Flipdot/live", image.to_string())
 
     def send_animation(self,path,animation):
-        data = {"name": Path(path).name, "animation" :animation.to_string()}
+        data = {"name": Path(path).parents[0].name, "animation" :animation.to_string()}
         self.client.publish("Flipdot/add_ani",json.dumps(data))
 
     def refresh_installed_assets(self):
