@@ -1,4 +1,6 @@
 import json
+import time
+
 from paho.mqtt import client as mqtt_client
 
 from Animation import *
@@ -9,6 +11,8 @@ class mqtt_designer:
         data = json.load(open(settings))
         self.animations = []
         self.images = []
+        self.image = Image()
+        self.animation = Animation()
         self.client = mqtt_client.Client(client_id)
         self.client.on_connect = self.on_connect
         self.client.username_pw_set(data["user"], data["password"])
@@ -21,6 +25,8 @@ class mqtt_designer:
     def on_connect(self,client, userdata, flags, rc):
         print("connected to broker")
         self.client.subscribe("Flipdot/assets")
+        self.client.subscribe("Flipdot/download_animation")
+        self.client.subscribe("Flipdot/download_image")
         self.client.on_message = self.callback
         self.refresh_installed_assets()
 
@@ -46,23 +52,27 @@ class mqtt_designer:
         return self.images
 
     def get_animation(self,name):
-        #TODO make request
+        self.client.publish("Flipdot/get_animation",name)
         print(name)
-        animation = Animation()
-        return animation
+        time.sleep(3)
+        return copy.deepcopy(self.animation)
 
     def remove_asset(self,name):
         print("removing "+str(name))
         self.client.publish("Flipdot/remove", name)
 
     def get_image(self,name):
-        #TODO make request
+        self.client.publish("Flipdot/get_image",name)
         print(name)
-        image = Image()
-        return image
+        time.sleep(3)
+        return copy.deepcopy(self.image)
 
     def callback(self,client,userdata,msg):
-        data = json.loads(msg.payload.decode())
-        self.animations = data["Animations"]
-        self.images = data["Images"]
-
+        if(msg.topic == "Flipdot/assets"):
+            data = json.loads(msg.payload.decode())
+            self.animations = data["Animations"]
+            self.images = data["Images"]
+        elif msg.topic == "Flipdot/download_animation":
+            self.animation.from_string(msg.payload.decode())
+        elif msg.topic == "Flipdot/download_image":
+            self.image.from_string(msg.payload.decode())
