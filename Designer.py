@@ -144,10 +144,10 @@ class Designer:
                     suf = pathlib.Path(self.file).suffix
                     if(suf == ".json"):
                         self.load_amimation(self.file)
-                        self.connector.send_animation(self.animation)
+                        self.connector.send_animation(self.file,self.animation)
                     else:
                         self.load_image(self.file)
-                        self.connector.send_image(self.image)
+                        self.connector.send_image(self.file,self.image)
                     self.refresh_asset_list()
             elif event == "download":
                 if self.selected == "images":

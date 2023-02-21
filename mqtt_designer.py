@@ -2,7 +2,7 @@ import json
 import time
 
 from paho.mqtt import client as mqtt_client
-
+from pathlib import Path
 from Animation import *
 
 class mqtt_designer:
@@ -30,14 +30,16 @@ class mqtt_designer:
         self.client.on_message = self.callback
         self.refresh_installed_assets()
 
-    def send_image(self,image):
-        self.client.publish("Flipdot/add_image", image.to_string())
+    def send_image(self,path,image):
+        data = {"name": Path(path).name, "image" : image.to_string()}
+        self.client.publish("Flipdot/add_image", json.dumps(data))
 
     def display_image(self,image):
         self.client.publish("Flipdot/live", image.to_string())
 
-    def send_animation(self,animation):
-        self.client.publish("Flipdot/add_ani",animation.to_string())
+    def send_animation(self,path,animation):
+        data = {"name": Path(path).name, "animation" :animation.to_string()}
+        self.client.publish("Flipdot/add_ani",json.dumps(data))
 
     def refresh_installed_assets(self):
         self.client.publish("Flipdot/get_assets")
