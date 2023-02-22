@@ -3,6 +3,7 @@ import os
 import json
 from pathlib import Path
 from Snake import *
+from Pong import *
 
 from paho.mqtt import client as mqtt_client
 from Display import *
@@ -203,6 +204,9 @@ class Net_Controller:
     def load_game(self, msg):
         if(msg.payload.decode() == "snake"):
             self.game = Snake()
+            self.mode = "game"
+        elif msg.payload.decode() == "pong":
+            self.game = Pong()
             self.mode = "game"
         else:
             pass #no valid game
