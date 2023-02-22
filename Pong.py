@@ -14,7 +14,7 @@ class Pong:
         self.p1_l = 10
         self.p2_l = 10
         self.min = 5
-        self.speed = 0.5
+        self.speed = 0.4
         self.b_speed = [1,1]
 
 
