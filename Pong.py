@@ -30,7 +30,7 @@ class Snake:
                 self.game_over(self.ball[0]==27)
             #check if paddels reached
             if self.ball[0] == 1:
-                if self.ball[1] in range(self.p1[1],self.p1+self.p1_l):
+                if self.ball[1] in range(self.p1[1],self.p1[1]+self.p1_l):
                     factor = (self.ball[1]-self.p1[1])/(self.p1_l/2)-1
                     abs_speeed = abs(self.b_speed[0])+abs(self.b_speed[1])
                     self.b_speed[0] = - int(self.b_speed[0] * factor)
@@ -39,7 +39,7 @@ class Snake:
                     if self.b_speed[1] > 0:
                         self.b_speed[1] += abs_speeed-abs(self.b_speed[0])
             if self.ball[0] == 26:
-                if self.ball[1] in range(self.p2[1],self.p2+self.p2_l):
+                if self.ball[1] in range(self.p2[1],self.p2[1]+self.p2_l):
                     factor = (self.ball[1]-self.p2[1])/(self.p2_l/2)-1
                     abs_speeed = abs(self.b_speed[0])+abs(self.b_speed[1])
                     self.b_speed[0] = - int(self.b_speed[0] * factor)
@@ -50,9 +50,9 @@ class Snake:
             #generate image
             image = Image()
             image.toggleDot(self.ball[0],self.ball[1])
-            for p in range(self.p1[1],self.p1+self.p1_l):
+            for p in range(self.p1[1],self.p1[1]+self.p1_l):
                 image.toggleDot(0,p)
-            for p in range(self.p2[1],self.p2+self.p2_l):
+            for p in range(self.p2[1],self.p2[1]+self.p2_l):
                 image.toggleDot(27,p)
 
             return (image,self.speed)
@@ -77,7 +77,6 @@ class Snake:
                 self.p2[1]+=1
 
     def game_over(self,right):
-        #TODO check paddle size and ajust those bevore ending the game
         if right:
             self.p2_l -= 1
             self.p1_l += 1
