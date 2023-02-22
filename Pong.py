@@ -1,20 +1,21 @@
 import json
 import time
 import random
+import math
 from Image import *
 
-class Snake:
+class Pong:
 
     def __init__(self):
         self.state = "run"
-        self.ball = [20,20]
+        self.ball = [8,10]
         self.p1 = [0,0]
         self.p2 = [27,0]
         self.p1_l = 10
         self.p2_l = 10
         self.min = 5
         self.speed = 0.5
-        self.b_speed = [3,3]
+        self.b_speed = [1,1]
 
 
     def getframe(self):
@@ -22,6 +23,14 @@ class Snake:
             #move ball
             self.ball[0] += self.b_speed[0]
             self.ball[1] += self.b_speed[1]
+            if self.ball[0] > 27:
+                self.ball[0] = 27
+            if self.ball[0] < 0:
+                self.ball[0] = 0
+            if self.ball[1] > 27:
+                self.ball[1] = 27
+            if self.ball[1] < 0:
+                self.ball[1] = 0
             #check for borders
             #up and down
             if self.ball[1] == 0 or self.ball[1] == 27:
@@ -33,7 +42,10 @@ class Snake:
                 if self.ball[1] in range(self.p1[1],self.p1[1]+self.p1_l):
                     factor = (self.ball[1]-self.p1[1])/(self.p1_l/2)-1
                     abs_speeed = abs(self.b_speed[0])+abs(self.b_speed[1])
-                    self.b_speed[0] = - int(self.b_speed[0] * factor)
+                    if self.b_speed[0] < 0:
+                        self.b_speed[0] = - math.floor(self.b_speed[0] * abs(factor)-0.1)
+                    else:
+                        self.b_speed[0] = - math.ceil(self.b_speed[0] * abs(factor)+0.1)
                     if self.b_speed[1] < 0:
                         self.b_speed[1] -= abs_speeed-abs(self.b_speed[0])
                     if self.b_speed[1] > 0:
@@ -42,7 +54,10 @@ class Snake:
                 if self.ball[1] in range(self.p2[1],self.p2[1]+self.p2_l):
                     factor = (self.ball[1]-self.p2[1])/(self.p2_l/2)-1
                     abs_speeed = abs(self.b_speed[0])+abs(self.b_speed[1])
-                    self.b_speed[0] = - int(self.b_speed[0] * factor)
+                    if self.b_speed[0] < 0:
+                        self.b_speed[0] = - math.floor(self.b_speed[0] * abs(factor)-0.1)
+                    else:
+                        self.b_speed[0] = - math.ceil(self.b_speed[0] * abs(factor)+0.1)
                     if self.b_speed[1] < 0:
                         self.b_speed[1] -= abs_speeed-abs(self.b_speed[0])
                     if self.b_speed[1] > 0:
@@ -51,9 +66,11 @@ class Snake:
             image = Image()
             image.toggleDot(self.ball[0],self.ball[1])
             for p in range(self.p1[1],self.p1[1]+self.p1_l):
-                image.toggleDot(0,p)
+                if p < 28:
+                    image.toggleDot(0,p)
             for p in range(self.p2[1],self.p2[1]+self.p2_l):
-                image.toggleDot(27,p)
+                if p < 28:
+                    image.toggleDot(27,p)
 
             return (image,self.speed)
         else:
@@ -67,13 +84,13 @@ class Snake:
             if self.p1[1] != 0:
                 self.p1[1]-=1
         elif input == "DOWN":
-            if self.p1[1]+self.p1_l != 27:
+            if self.p1[1]+self.p1_l != 28:
                 self.p1[1]+=1
         elif input == "LEFT":
             if self.p2[1] != 0:
                 self.p2[1]-=1
         elif input == "RIGHT":
-            if self.p2[1]+self.p2_l != 27:
+            if self.p2[1]+self.p2_l != 28:
                 self.p2[1]+=1
 
     def game_over(self,right):
@@ -87,8 +104,8 @@ class Snake:
             self.state = "game_over"
         else:
             time.sleep(3)
-            self.b_speed = [3,3]
-            self.ball = [20,20]
+            self.b_speed = [1,1]
+            self.ball = [8,10]
 
 if __name__ == "__main__":
     snake = Snake()
