@@ -196,7 +196,7 @@ class Net_Controller:
 
     def blacklisted(self, name):
         #ignores Special folders during the search for animations
-        if name == "__pycache__" or name == ".idea" or name == ".git":
+        if name == "__pycache__" or name == ".idea" or name == ".git" or name =="icons":
             return True
         else :
             return False
