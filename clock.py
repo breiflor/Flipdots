@@ -21,7 +21,11 @@ class Clock:
             self.static = self.numgen.get_entry(0)[0]
 
     def getframe(self):
-        return self.generate_image(),self.time_between_frames
+        if self.background is None:
+            return self.generate_image(),self.time_between_frames
+        else:
+            background = self.background.getframe() #assuming that the Animation was initilized with loop enabled
+            return self.generate_image()+background[0],background[1]
 
     def generate_image(self):
         time = datetime.datetime.now()
@@ -70,13 +74,5 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="analog")
-    #while True:
-    #    clock.generate_image().show()
-    clock.image_analog(12,10).show()
-    clock.image_analog(12,20).show()
-    clock.image_analog(2,20).show()
-    clock.image_analog(2,7).show()
-    clock.image_analog(2,1).show()
-    clock.image_analog(1,1).show()
-    clock.image_analog(22,7).show()
-    clock.image_analog(22,30).show()
+    while True:
+        clock.getframe()[0].show()
