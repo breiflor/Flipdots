@@ -42,7 +42,7 @@ class Net_Controller:
         self.subcribe("Flipdot/control", self.callback)
         self.subcribe("Flipdot/get_animation", self.callback)
         self.subcribe("Flipdot/get_image", self.callback)
-        self.subcribe("Flipdot/smart_home",self.callback())
+        self.subcribe("Flipdot/smart_home",self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
