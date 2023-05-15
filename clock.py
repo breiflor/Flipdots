@@ -151,7 +151,16 @@ class Clock:
         pass
 
     def update_traffic(self, param):
-        pass
+        print(param)
+        try:
+            im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
+            im.shift_and_fill(5,11)
+            clip = Image("icons/BUS3.txt")
+            clip.shift_and_fill(5)
+            self.smart_home_bg += im
+            self.smart_home_bg += clip
+        except:
+            pass
 
     def update_timer(self, param):
         pass
@@ -165,7 +174,7 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
-    frame = "{\"windows\":{\"bad_oben\":false,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":false}," \
+    frame = "{\"windows\":{\"bad_oben\":true,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":true}," \
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
