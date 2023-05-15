@@ -11,6 +11,7 @@ class Clock:
         self.background = background_animation
         self.smart_home_bg = None
         self.time_between_frames = time_between_frames
+        self.numgen_smarthome = NumberGenerator("numbers/numbers.json", 1)
         #Static setup here
         if(self.design == "digital modern"):
             self.numgen = NumberGenerator("numbers/numbers.json",2)
@@ -108,34 +109,42 @@ class Clock:
         pass
 
     def update_temp(self, forecast, outdoor):
-        if(forecast["temp"]<0):
-            im = self.numgen.get_image(int(abs(forecast["temp"])))
-            im.shift_and_fill(0,3)
+        im = self.numgen_smarthome.get_image(int(round(abs(forecast["temp"]))))
+        im.shift_and_fill(0,3)
+        c = Image("icons/C.txt")
+        if (forecast["temp"] < 0):
             im.toggleDot(2,0)
             im.toggleDot(2,1)
+            if forecast["temp"] < -9:
+                c.shift_and_fill(23,11)
+            else:
+                c.shift_and_fill(23,7)
+        elif forecast["temp"] <10:
+            im.shift_and_fill(0,-3)
+            c.shift_and_fill(23, 4)
         else:
-            im = self.numgen.get_image(int(abs(forecast["temp"])))
-            im.shift_and_fill(0, 3)
+            c.shift_and_fill(23, 8)
+            im.shift_and_fill(0, -3)
         im.shift_and_fill(23,0)
         try:
             name = "icons/"+forecast["weather"]+".txt"
             icon = Image(name)
         except:
             icon = Image()
-        icon.shift_and_fill(18,0)
+        icon.shift_and_fill(17,0)
         im+=icon
+        im+=c
         #Current temp
+        cm = self.numgen_smarthome.get_image(int(round(abs(outdoor["temp"]))))
+        cm.shift_and_fill(0, 3)
         if (outdoor["temp"] < 0):
-            cm = self.numgen.get_image(int(abs(outdoor["temp"])))
-            cm.shift_and_fill(0, 3)
             cm.toggleDot(2, 0)
             cm.toggleDot(2, 1)
-        else:
-            cm = self.numgen.get_image(int(abs(outdoor["temp"])))
-            cm.shift_and_fill(0, 3)
-        cm.shift_and_fill(23, 11)
+        cm.shift_and_fill(23, 15)
+        if (abs(outdoor["temp"]) < 10):
+            cm.shift_and_fill(0,4)
         icon = Image("icons/C.txt")
-        icon.shift_and_fill(24,23)
+        icon.shift_and_fill(23,26)
         cm+=icon
         self.smart_home_bg += im
         self.smart_home_bg += cm
@@ -157,8 +166,8 @@ class Clock:
 if __name__ == "__main__":
     clock = Clock(design="digital")
     frame = "{\"windows\":{\"bad_oben\":false,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":false}," \
-            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":15.2,\"hum\":65.0}," \
-            "\"forecast\":{\"temp\":16.5,\"weather\":\"cloudy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
+            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
+            "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-12 00:00:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"21\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1}}"
