@@ -86,6 +86,7 @@ class Clock:
         self.update_timer(smart_home["timer"])
         self.update_calender(smart_home["calender"])
         self.update_fan(smart_home["fan"])
+        self.update_plants(smart_home["plants"])
 
     def update_windows(self, param):
         if(param["bad_oben"]):
@@ -171,6 +172,12 @@ class Clock:
     def update_fan(self, param):
         pass
 
+    def update_plants(self, problem):
+        if problem:
+            im = Image("icons/can.txt")
+            im.shift_and_fill(5,20)
+            self.smart_home_bg+= im
+
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
@@ -179,7 +186,7 @@ if __name__ == "__main__":
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-12 00:00:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
-            "{\"departure 3\": \"21\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1}}"
+            "{\"departure 3\": \"21\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
     #while True:
     clock.update_smarthome(frame)
     clock.getframe()[0].show()
