@@ -34,14 +34,15 @@ class Animation:
         self.path = name
         if not vertical:
             for i in range(28):
-                i = copy.deepcopy(image)
-                i.shift_and_fill(0,i)
-                self.image_list.append((copy.deepcopy(i), speed))
+                im = copy.deepcopy(image)
+                im.shift_and_fill(0,i)
+                self.image_list.append((copy.deepcopy(im), speed))
+                print(i)
         else:
             for i in range(28):
-                i = copy.deepcopy(image)
-                i.shift_and_fill(i,0)
-                self.image_list.append((copy.deepcopy(i), speed))
+                im = copy.deepcopy(image)
+                im.shift_and_fill(i,0)
+                self.image_list.append((copy.deepcopy(im), speed))
 
     def load(self,path):
         if (pathlib.Path(path).is_file()):

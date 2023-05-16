@@ -9,6 +9,7 @@ class Clock:
     def __init__(self, time_between_frames= 1, design ="digital", background_animation=None):
         self.design = design
         self.background = background_animation
+        self.calender_alert = False
         self.smart_home_bg = None
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
@@ -27,8 +28,8 @@ class Clock:
         if self.background is not None:
             background = self.background.getframe()
             if background[1] == -1:
-                background[1] = self.time_between_frames
                 self.background = None
+                return self.generate_image()+background[0],self.time_between_frames
             return self.generate_image() + background[0], background[1]
         elif self.smart_home_bg is not None:
             return self.generate_image()+self.smart_home_bg,self.time_between_frames
@@ -158,12 +159,16 @@ class Clock:
 
     def update_traffic(self, param):
         try:
-            im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
-            im.shift_and_fill(5,11)
             clip = Image("icons/BUS3.txt")
             clip.shift_and_fill(5)
-            self.smart_home_bg += im
-            self.smart_home_bg += clip
+            if int(param["bus"]["departure 3"]) < 5 and self.background is None:
+                self.background = Animation()
+                self.background.animate_image(clip,loop=False)
+            else:
+                im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
+                im.shift_and_fill(5,11)
+                self.smart_home_bg += im
+                self.smart_home_bg += clip
         except:
             pass
 
@@ -179,7 +184,8 @@ class Clock:
                 print(datetime.datetime.now())
                 cicon = Image("icons/calender.txt")
                 self.background = Textgen(param["name"],0,28,1,background=cicon)
-            else:
+                self.calender_alert = True
+            elif self.calender_alert:
                 self.background = None
         except:
             pass
@@ -200,6 +206,7 @@ if __name__ == "__main__":
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 18:45:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
-            "{\"departure 3\": \"21\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
+            "{\"departure 3\": \"3\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
     clock.update_smarthome(frame)
-    clock.getframe()[0].show()
+    while True:
+        clock.getframe()[0].show()
