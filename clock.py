@@ -11,6 +11,7 @@ class Clock:
         self.background = background_animation
         self.calender_alert = False
         self.smart_home_bg = None
+        self.bus_drove=False
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
         self.numgen_smarthome = NumberGenerator("numbers/numbers.json", 1)
@@ -161,14 +162,16 @@ class Clock:
         try:
             clip = Image("icons/BUS3.txt")
             clip.shift_and_fill(5)
-            if int(param["bus"]["departure 3"]) < 5 and self.background is None:
+            if int(param["bus"]["departure 3"]) < 5  and not self.bus_drove:
+                self.bus_drove = True
                 self.background = Animation()
                 self.background.animate_image(clip,loop=False)
-            else:
+            elif int(param["bus"]["departure 3"]) >5:
                 im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
                 im.shift_and_fill(5,11)
                 self.smart_home_bg += im
                 self.smart_home_bg += clip
+                self.bus_drove = False
         except:
             pass
 
@@ -207,6 +210,7 @@ if __name__ == "__main__":
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 18:45:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"3\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
-    clock.update_smarthome(frame)
+
     while True:
+        clock.update_smarthome(frame)
         clock.getframe()[0].show()
