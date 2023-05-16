@@ -11,6 +11,7 @@ class Clock:
         self.background = background_animation
         self.smart_home_bg = None
         self.time_between_frames = time_between_frames
+        self.time_for_calender = datetime.timedelta(minutes=5)
         self.numgen_smarthome = NumberGenerator("numbers/numbers.json", 1)
         #Static setup here
         if(self.design == "digital modern"):
@@ -23,13 +24,17 @@ class Clock:
             self.static = self.numgen.get_entry(0)[0]
 
     def getframe(self):
-        if self.smart_home_bg is not None:
+        if self.background is not None:
+            background = self.background.getframe()
+            if background[1] == -1:
+                background[1] = self.time_between_frames
+                self.background = None
+            return self.generate_image() + background[0], background[1]
+        elif self.smart_home_bg is not None:
             return self.generate_image()+self.smart_home_bg,self.time_between_frames
-        elif self.background is None:
-            return self.generate_image(), self.time_between_frames
         else:
-            background = self.background.getframe() #assuming that the Animation was initilized with loop enabled
-            return self.generate_image()+background[0],background[1]
+            return self.generate_image(), self.time_between_frames
+
 
     def generate_image(self):
         time = datetime.datetime.now()
@@ -152,7 +157,6 @@ class Clock:
         pass
 
     def update_traffic(self, param):
-        print(param)
         try:
             im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
             im.shift_and_fill(5,11)
@@ -167,8 +171,18 @@ class Clock:
         pass
 
     def update_calender(self, param):
-        pass
-
+        print(param)
+        print(datetime.datetime.now())
+        try:
+            if datetime.datetime.strptime(param["start_time"], '%Y-%m-%d %H:%M:%S') - datetime.datetime.now() < self.time_for_calender \
+                    and datetime.datetime.strptime(param["start_time"], '%Y-%m-%d %H:%M:%S') - datetime.datetime.now()  >datetime.timedelta(0):
+                print(datetime.datetime.now())
+                cicon = Image("icons/calender.txt")
+                self.background = Textgen(param["name"],0,28,1,background=cicon)
+            else:
+                self.background = None
+        except:
+            pass
     def update_fan(self, param):
         pass
 
@@ -185,8 +199,7 @@ if __name__ == "__main__":
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
-            "\"start_time\":\"2023-05-12 00:00:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
+            "\"start_time\":\"2023-05-16 18:45:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"21\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
-    #while True:
     clock.update_smarthome(frame)
     clock.getframe()[0].show()
