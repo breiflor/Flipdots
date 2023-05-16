@@ -37,7 +37,6 @@ class Animation:
                 im = copy.deepcopy(image)
                 im.shift_and_fill(0,i)
                 self.image_list.append((copy.deepcopy(im), speed))
-                print(i)
         else:
             for i in range(28):
                 im = copy.deepcopy(image)

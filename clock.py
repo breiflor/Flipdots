@@ -179,12 +179,9 @@ class Clock:
         pass
 
     def update_calender(self, param):
-        print(param)
-        print(datetime.datetime.now())
         try:
             if datetime.datetime.strptime(param["start_time"], '%Y-%m-%d %H:%M:%S') - datetime.datetime.now() < self.time_for_calender \
                     and datetime.datetime.strptime(param["start_time"], '%Y-%m-%d %H:%M:%S') - datetime.datetime.now()  >datetime.timedelta(0):
-                print(datetime.datetime.now())
                 cicon = Image("icons/calender.txt")
                 self.background = Textgen(param["name"],0,28,1,background=cicon)
                 self.calender_alert = True
@@ -208,7 +205,7 @@ if __name__ == "__main__":
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
-            "\"start_time\":\"2023-05-16 18:45:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
+            "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"3\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
 
     while True:

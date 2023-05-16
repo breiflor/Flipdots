@@ -157,7 +157,7 @@ class Image:
 
 class Textgen:
 
-    def __init__(self,text,x=0,y=9,shift=1,scale = 0.8,factor =6.5,background=None,speed=1):
+    def __init__(self,text,x=0,y=9,shift=1,scale = 0.8,factor =6.5,background=None,speed=0.3):
         self.text = text
         self.scale = scale
         self.x = x
