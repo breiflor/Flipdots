@@ -166,7 +166,7 @@ class Clock:
                 self.bus_drove = True
                 self.background = Animation()
                 self.background.animate_image(clip,loop=False)
-            elif int(param["bus"]["departure 3"]) >5:
+            elif int(param["bus"]["departure 3"]) >=5:
                 im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
                 im.shift_and_fill(5,11)
                 self.smart_home_bg += im
