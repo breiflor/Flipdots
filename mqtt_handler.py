@@ -42,6 +42,7 @@ class Net_Controller:
         self.subcribe("Flipdot/control", self.callback)
         self.subcribe("Flipdot/get_animation", self.callback)
         self.subcribe("Flipdot/get_image", self.callback)
+        self.subcribe("Flipdot/smart_home",self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -69,6 +70,12 @@ class Net_Controller:
             self.play_loop(msg)
         elif (msg.topic == "Flipdot/clock"):
             self.clock_mode(msg)
+        elif (msg.topic == "Flipdot/smart_home"):
+            if self.clock is not None:
+                self.clock.update_smarthome(msg.payload.decode())
+            else:
+                self.clock = Clock()
+                self.mode = "clock"
         elif (msg.topic == "Flipdot/music"):
             self.music_mode(msg)
         elif (msg.topic == "Flipdot/get_assets"):
@@ -196,7 +203,7 @@ class Net_Controller:
 
     def blacklisted(self, name):
         #ignores Special folders during the search for animations
-        if name == "__pycache__" or name == ".idea" or name == ".git":
+        if name == "__pycache__" or name == ".idea" or name == ".git" or name =="icons":
             return True
         else :
             return False

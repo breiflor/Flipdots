@@ -29,6 +29,20 @@ class Animation:
         self.loop = loop
         self.current_index = 0
 
+    def animate_image(self,image,speed=1,vertical=False,loop=True,name="generic_animation"):
+        self.loop = loop
+        self.path = name
+        if not vertical:
+            for i in range(28):
+                im = copy.deepcopy(image)
+                im.shift_and_fill(0,i)
+                self.image_list.append((copy.deepcopy(im), speed))
+        else:
+            for i in range(28):
+                im = copy.deepcopy(image)
+                im.shift_and_fill(i,0)
+                self.image_list.append((copy.deepcopy(im), speed))
+
     def load(self,path):
         if (pathlib.Path(path).is_file()):
             file = path

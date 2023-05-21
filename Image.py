@@ -157,13 +157,15 @@ class Image:
 
 class Textgen:
 
-    def __init__(self,text,x=0,y=9,shift=1,scale = 0.8,factor =6.5):
+    def __init__(self,text,x=0,y=9,shift=1,scale = 0.8,factor =6.5,background=None,speed=0.3):
         self.text = text
         self.scale = scale
         self.x = x
         self.y = y
         self.shift = shift
         self.factor = factor #describes how much x space a font needs
+        self.background = background
+        self.speed = speed
 
     def get_image(self):
         img = Image()
@@ -171,6 +173,8 @@ class Textgen:
         self.x -= self.shift
         if 0 > self.text.__len__()*self.scale*self.factor +self.x :
             self.x = 0
+        if self.background is not None:
+            img+=self.background
         return img
 
     def get_text(self):
@@ -178,6 +182,8 @@ class Textgen:
         #self.current_frame = (self.current_frame+1) % self.frames
         return text
 
+    def getframe(self):
+        return (self.get_image(),self.speed)
 
 if __name__ == "__main__":
     txt = Textgen("youre not special",scale=0.6)
