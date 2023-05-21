@@ -208,12 +208,12 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
-    frame = "{\"windows\":{\"bad_oben\":true,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":true}," \
+    frame = "{\"windows\":{\"bad_oben\":true,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":false}," \
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
-            "{\"departure 3\": \"3\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
+            "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
 
     while True:
         clock.update_smarthome(frame)
