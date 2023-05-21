@@ -6,11 +6,12 @@ from NumerGenerator import *
 
 class Clock:
     #The clock is designed to be passed to the display with the same interface as the animation
-    def __init__(self, time_between_frames= 1, design ="digital", background_animation=None):
+    def __init__(self, time_between_frames= 20, design ="digital", background_animation=None):
         self.design = design
         self.background = background_animation
         self.calender_alert = False
         self.smart_home_bg = None
+        self.window_open = False
         self.bus_drove=False
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
@@ -96,22 +97,27 @@ class Clock:
         self.update_plants(smart_home["plants"])
 
     def update_windows(self, param):
+        self.window_open = False
         if(param["bad_oben"]):
             img = Image("icons/shower.txt")
             img.shift_and_fill(0,0)
             self.smart_home_bg+=img
+            self.window_open = True
         if (param["bad_unten"]):
             img = Image("icons/tub.txt")
             img.shift_and_fill(0, 7)
             self.smart_home_bg += img
+            self.window_open = True
         if (param["flo_bureo"]):
             img = Image("icons/flo.txt")
             img.shift_and_fill(0, 14)
             self.smart_home_bg += img
+            self.window_open = True
         if (param["hannah_bureo"]):
             img = Image("icons/hannah.txt")
             img.shift_and_fill(0, 21)
             self.smart_home_bg += img
+            self.window_open = True
 
     def update_washer(self, param):
         pass
@@ -139,7 +145,8 @@ class Clock:
             icon = Image(name)
         except:
             icon = Image()
-        icon.shift_and_fill(17,0)
+        if self.window_open:
+            icon.shift_and_fill(17,0)
         im+=icon
         im+=c
         #Current temp
