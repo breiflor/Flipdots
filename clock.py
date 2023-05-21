@@ -6,7 +6,7 @@ from NumerGenerator import *
 
 class Clock:
     #The clock is designed to be passed to the display with the same interface as the animation
-    def __init__(self, time_between_frames= 20, design ="digital", background_animation=None):
+    def __init__(self, time_between_frames= 1, design ="digital", background_animation=None):
         self.design = design
         self.background = background_animation
         self.calender_alert = False
