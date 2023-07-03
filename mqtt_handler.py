@@ -15,10 +15,10 @@ class Net_Controller:
 
     def __init__(self,broker= 'homeassistant.local',port= 1883,client_id= f'Fliptot watchdog',settings = "mqtt_config.cfg"):
         data = json.load(open(settings))
-        self.mode = None
         self.display = Display()
-        #self.display.white()
-        self.clock = None
+        #self.display.black()
+        self.clock = Clock(design="digital")
+        self.mode = "clock"
         self.game = None
         #animation = Animation("startup_animation/")
         #self.display._play_animation(animation)
@@ -43,7 +43,6 @@ class Net_Controller:
         self.subcribe("Flipdot/get_animation", self.callback)
         self.subcribe("Flipdot/get_image", self.callback)
         self.subcribe("Flipdot/smart_home",self.callback)
-        self.clock_mode()
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
