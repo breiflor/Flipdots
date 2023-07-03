@@ -22,7 +22,7 @@ class Clock:
         elif self.design == "digital":
             self.numgen = NumberGenerator("numbers/numbers.json",2)
             self.static = Image("dot.txt")
-        elif self.design == "analog":
+        else:
             self.numgen = Animation("analog_clock/handle.json")
             self.static = self.numgen.get_entry(0)[0]
 

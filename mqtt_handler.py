@@ -17,11 +17,11 @@ class Net_Controller:
         data = json.load(open(settings))
         self.mode = None
         self.display = Display()
-        self.display.white()
+        #self.display.white()
         self.clock = None
         self.game = None
-        animation = Animation("startup_animation/")
-        self.display._play_animation(animation)
+        #animation = Animation("startup_animation/")
+        #self.display._play_animation(animation)
         self.animation = None
         self.music = None
         self.client = mqtt_client.Client(client_id)
@@ -43,6 +43,7 @@ class Net_Controller:
         self.subcribe("Flipdot/get_animation", self.callback)
         self.subcribe("Flipdot/get_image", self.callback)
         self.subcribe("Flipdot/smart_home",self.callback)
+        self.clock_mode()
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -96,6 +97,8 @@ class Net_Controller:
         self.client.on_message = cb
 
     def shutdown(self):
+        sleep = Image("icons/sleep.txt")
+        self.display.sendImage(sleep)
         print(os.system("sh shutdown.sh"))
 
     def live_mode(self,msg):
