@@ -98,7 +98,9 @@ class Net_Controller:
     def shutdown(self):
         sleep = Image("icons/sleep.txt")
         self.display.sendImage(sleep)
+        self.mode = None
         print(os.system("sh shutdown.sh"))
+        exit()
 
     def live_mode(self,msg):
         try:
