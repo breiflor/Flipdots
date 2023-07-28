@@ -123,47 +123,49 @@ class Clock:
         pass
 
     def update_temp(self, forecast, outdoor):
-        im = self.numgen_smarthome.get_image(int(round(abs(forecast["temp"]))))
-        im.shift_and_fill(0,3)
-        c = Image("icons/C.txt")
-        if (forecast["temp"] < 0):
-            im.toggleDot(2,0)
-            im.toggleDot(2,1)
-            if forecast["temp"] < -9:
-                c.shift_and_fill(23,11)
-            else:
-                c.shift_and_fill(23,7)
-        elif forecast["temp"] <10:
-            im.shift_and_fill(0,-3)
-            c.shift_and_fill(23, 4)
-        else:
-            c.shift_and_fill(23, 8)
-            im.shift_and_fill(0, -3)
-        im.shift_and_fill(23,0)
         try:
-            name = "icons/"+forecast["weather"]+".txt"
-            icon = Image(name)
+            im = self.numgen_smarthome.get_image(int(round(abs(forecast["temp"]))))
+            im.shift_and_fill(0,3)
+            c = Image("icons/C.txt")
+            if (forecast["temp"] < 0):
+                im.toggleDot(2,0)
+                im.toggleDot(2,1)
+                if forecast["temp"] < -9:
+                    c.shift_and_fill(23,11)
+                else:
+                    c.shift_and_fill(23,7)
+            elif forecast["temp"] <10:
+                im.shift_and_fill(0,-3)
+                c.shift_and_fill(23, 4)
+            else:
+                c.shift_and_fill(23, 8)
+                im.shift_and_fill(0, -3)
+            im.shift_and_fill(23,0)
+            try:
+                name = "icons/"+forecast["weather"]+".txt"
+                icon = Image(name)
+            except:
+                icon = Image()
+            if self.window_open:
+                icon.shift_and_fill(17,0)
+            im+=icon
+            im+=c
+            #Current temp
+            cm = self.numgen_smarthome.get_image(int(round(abs(outdoor["temp"]))))
+            cm.shift_and_fill(0, 3)
+            if (outdoor["temp"] < 0):
+                cm.toggleDot(2, 0)
+                cm.toggleDot(2, 1)
+            cm.shift_and_fill(23, 15)
+            if (abs(outdoor["temp"]) < 10):
+                cm.shift_and_fill(0,4)
+            icon = Image("icons/C.txt")
+            icon.shift_and_fill(23,26)
+            cm+=icon
+            self.smart_home_bg += im
+            self.smart_home_bg += cm
         except:
-            icon = Image()
-        if self.window_open:
-            icon.shift_and_fill(17,0)
-        im+=icon
-        im+=c
-        #Current temp
-        cm = self.numgen_smarthome.get_image(int(round(abs(outdoor["temp"]))))
-        cm.shift_and_fill(0, 3)
-        if (outdoor["temp"] < 0):
-            cm.toggleDot(2, 0)
-            cm.toggleDot(2, 1)
-        cm.shift_and_fill(23, 15)
-        if (abs(outdoor["temp"]) < 10):
-            cm.shift_and_fill(0,4)
-        icon = Image("icons/C.txt")
-        icon.shift_and_fill(23,26)
-        cm+=icon
-        self.smart_home_bg += im
-        self.smart_home_bg += cm
-        pass
+            pass
 
     def update_traffic(self, param):
         try:
