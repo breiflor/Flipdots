@@ -108,7 +108,7 @@ class Snake:
             for i in range(0,4):
                 if len(self.highscore) > 0:
                     score, name = self.highscore.popitem()
-                    image += self.numgen.get_image(score).shift_and_fill(i*7+1,16)
+                    image += self.numgen.get_image(score).shift_and_fill(i*7+1,17)
                     image.insert_text(name,(0,i*7+5),scale=0.5)
 
             return (image,-1)
