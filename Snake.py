@@ -81,21 +81,26 @@ class Snake:
         elif self.state == "game_over":
              #return Gameover image TODO
             if self.change_to == 'UP' :
-                 self.name[self.nam_at]= chr(ord(self.name[self.nam_at])-1)
+                name = list(self.name)
+                name[self.nam_at] = chr(ord(self.name[self.nam_at])-1)
+                self.name = "".join(name) 
             if self.change_to == 'DOWN':
-                 self.name[self.nam_at] = chr(ord(self.name[self.nam_at])+1)
+                name = list(self.name)
+                name[self.nam_at] = chr(ord(self.name[self.nam_at])+1)
+                self.name = "".join(name) 
             if self.change_to == 'LEFT' :
                 if self.nam_at > 0:
                     self.nam_at -= 1
             if self.change_to == 'RIGHT' :
-                if self.nam_at < 3:
+                if self.nam_at < 2:
                     self.nam_at += 1
                 else :
                     self.save_highcore()
+            self.change_to = 'NONE' 
             image = Image()
             image.insert_text("Score",(0,7),scale=0.6)
             image.insert_text(self.name,(1,15),scale=0.7)
-            image.insert_text(str(self.score),(0,26),scale=0.8)
+            image += self.numgen.get_image(self.score).shift_and_fill(0,26)
             return (image,0.5) # TODO check update speed
         elif self.state == "highscore":
             image = Image()
@@ -103,7 +108,6 @@ class Snake:
                 if len(self.highscore) > 0:
                     score, name = self.highscore.popitem()
                     image += self.numgen.get_image(score).shift_and_fill(i*7+1,16)
-                    print(name)
                     image.insert_text(name,(0,i*7+5),scale=0.5)
 
             return (image,-1)
@@ -111,9 +115,12 @@ class Snake:
 
 
     def save_highcore(self):
-        self.highscore = json.loads(open("snake_highscore.json",))
+        self.highscore = json.load(open("snake_highscore.json",))
         self.highscore[self.score] = self.name
-        self.highscore = dict(sorted(self.highscore.items()))
+        new_dict = {}
+        for ele,nam  in self.highscore.items():
+            new_dict[int(ele)] = nam
+        self.highscore = dict(sorted(new_dict.items()))
         json.dump(self.highscore,open("snake_highscore.json","wt"))
         self.state = "highscore"
 
@@ -123,7 +130,7 @@ class Snake:
 
     def game_over(self):
         self.state = "game_over"
-        self.direction = 'NONE'
+        self.change_to = 'NONE'
         self.nam_at = 0
 
 if __name__ == "__main__":
