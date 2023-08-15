@@ -100,7 +100,8 @@ class Snake:
             image = Image()
             image.insert_text("Score",(0,7),scale=0.6)
             image.insert_text(self.name,(1,15),scale=0.7)
-            image += self.numgen.get_image(self.score).shift_and_fill(0,26)
+            image.insert_text("_",(self.nam_at*7+1,18),scale=0.7)
+            image += self.numgen.get_image(self.score).shift_and_fill(20,2)
             return (image,0.5) # TODO check update speed
         elif self.state == "highscore":
             image = Image()
@@ -135,7 +136,7 @@ class Snake:
 
 if __name__ == "__main__":
     snake = Snake()
-    snake.state = "highscore"
+    snake.state = "game_over"
 
     while(1):
         snake.getframe()[0].show()
