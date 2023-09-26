@@ -72,7 +72,10 @@ class Net_Controller:
             self.clock_mode(msg)
         elif (msg.topic == "Flipdot/smart_home"):
             if self.clock is not None:
-                self.clock.update_smarthome(msg.payload.decode())
+                try:
+                    self.clock.update_smarthome(msg.payload.decode())
+                except:
+                    print("currupt mqtt")
             else:
                 self.clock = Clock()
                 self.mode = "clock"
