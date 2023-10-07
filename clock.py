@@ -202,8 +202,16 @@ class Clock:
         pass
 
     def update_plants(self, problem):
-        if problem:
+        if problem["willhelm"] and problem["berndt"]:
+            im = Image("icons/pump.txt")
+            im.shift_and_fill(5,20)
+            self.smart_home_bg+= im
+        elif problem["willhelm"]:
             im = Image("icons/can.txt")
+            im.shift_and_fill(5,20)
+            self.smart_home_bg+= im
+        elif problem["berndt"]:
+            im = Image("icons/water_up.txt")
             im.shift_and_fill(5,20)
             self.smart_home_bg+= im
 
