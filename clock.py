@@ -127,14 +127,14 @@ class Clock:
             im = self.numgen_smarthome.get_image(int(round(abs(forecast["temp"]))))
             im.shift_and_fill(0,3)
             c = Image("icons/C.txt")
-            if (forecast["temp"] < 0):
+            if (int(round(abs(forecast["temp"]))) < 0):
                 im.toggleDot(2,0)
                 im.toggleDot(2,1)
-                if forecast["temp"] < -9:
+                if int(round(abs(forecast["temp"]))) < -9:
                     c.shift_and_fill(23,11)
                 else:
                     c.shift_and_fill(23,7)
-            elif forecast["temp"] <10:
+            elif int(round(abs(forecast["temp"]))) <10:
                 im.shift_and_fill(0,-3)
                 c.shift_and_fill(23, 4)
             else:
@@ -153,11 +153,11 @@ class Clock:
             #Current temp
             cm = self.numgen_smarthome.get_image(int(round(abs(outdoor["temp"]))))
             cm.shift_and_fill(0, 3)
-            if (outdoor["temp"] < 0):
+            if (int(round(abs(outdoor["temp"]))) < 0):
                 cm.toggleDot(2, 0)
                 cm.toggleDot(2, 1)
             cm.shift_and_fill(23, 15)
-            if (abs(outdoor["temp"]) < 10):
+            if (int(round(abs(outdoor["temp"]))) < 10):
                 cm.shift_and_fill(0,4)
             icon = Image("icons/C.txt")
             icon.shift_and_fill(23,26)
