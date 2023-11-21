@@ -11,7 +11,7 @@ class Clock:
         self.background = background_animation
         self.calender_alert = False
         self.smart_home_bg = None
-        self.window_open = False
+        self.notifications = False
         self.bus_drove=False
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
@@ -87,7 +87,7 @@ class Clock:
     def update_smarthome(self,msg):
         smart_home = json.loads(msg)
         self.smart_home_bg = Image()
-        self.update_windows(smart_home["windows"])
+        self.update_notifications(smart_home["notifications"])
         self.update_washer(smart_home["washer"])
         self.update_temp(smart_home["forecast"],smart_home["outdoor"])
         self.update_traffic(smart_home["traffic"])
@@ -96,28 +96,31 @@ class Clock:
         self.update_fan(smart_home["fan"])
         self.update_plants(smart_home["plants"])
 
-    def update_windows(self, param):
-        self.window_open = False
-        if(param["bad_oben"]):
-            img = Image("icons/shower.txt")
-            img.shift_and_fill(0,0)
+    def update_notifications(self, notification_list):
+        if len(notification_list) == 0:
+            self.notifications = False
+        elif len(notification_list) > 4:
+            self.notifications = True
+            img = self.numgen_smarthome.get_image(len(notification_list))
+            message = Image("icons/notification.txt")
+            if(len(notification_list)>9):
+                img.shift_and_fill(0,16)
+            else:
+                img.shift_and_fill(0,19)
+            message.shift_and_fill(0,23)
+            img += message
             self.smart_home_bg+=img
-            self.window_open = True
-        if (param["bad_unten"]):
-            img = Image("icons/tub.txt")
-            img.shift_and_fill(0, 7)
-            self.smart_home_bg += img
-            self.window_open = True
-        if (param["flo_bureo"]):
-            img = Image("icons/flo.txt")
-            img.shift_and_fill(0, 14)
-            self.smart_home_bg += img
-            self.window_open = True
-        if (param["hannah_bureo"]):
-            img = Image("icons/hannah.txt")
-            img.shift_and_fill(0, 21)
-            self.smart_home_bg += img
-            self.window_open = True
+        else:
+            self.notifications = True
+            display_start = 0
+            for notification in notification_list:
+                try:
+                    img = Image("icons/"+notification+".txt")
+                except:
+                    img = Image("icons/noicon.txt")
+                img.shift_and_fill(0,display_start)
+                self.smart_home_bg+=img
+                display_start += 7
 
     def update_washer(self, param):
         pass
@@ -146,7 +149,7 @@ class Clock:
                 icon = Image(name)
             except:
                 icon = Image()
-            if self.window_open:
+            if self.notifications:
                 icon.shift_and_fill(17,0)
             im+=icon
             im+=c
@@ -218,12 +221,12 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
-    frame = "{\"windows\":{\"bad_oben\":true,\"bad_unten\":false,\"flo_bureo\":false,\"hannah_bureo\":false}," \
+    frame = "{\"notifications\":[\"shower\",\"tub\",\"flo\",\"hannah\",\"message\"]," \
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
-            "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":true}"
+            "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":false}}"
 
     while True:
         clock.update_smarthome(frame)
