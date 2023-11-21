@@ -85,7 +85,7 @@ class Clock:
         return self.numgen.get_entry(1+small*2)[0] + self.static + self.numgen.get_entry(2+big*2)[0]
 
     def update_smarthome(self,msg):
-        smart_home = json.loads(msg)
+        smart_home = json.loads(msg.replace("'", '"'))
         self.smart_home_bg = Image()
         self.update_notifications(smart_home["notifications"])
         self.update_washer(smart_home["washer"])
@@ -221,7 +221,7 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
-    frame = "{\"notifications\":[\"shower\",\"tub\",\"flo\",\"hannah\",\"message\"]," \
+    frame = "{\"notifications\":[\'shower\',\"tub\",\"flo\",\"kehrstin\"]," \
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
