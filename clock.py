@@ -160,6 +160,8 @@ class Clock:
                 cm.toggleDot(2, 0)
                 cm.toggleDot(2, 1)
             cm.shift_and_fill(23, 15)
+            if int(round(forecast["temp"])) < -9:
+                cm.shift_and_fill(0, -4)
             if (int(round(outdoor["temp"])) < 10):
                 cm.shift_and_fill(0,4)
             icon = Image("icons/C.txt")
@@ -222,8 +224,8 @@ class Clock:
 if __name__ == "__main__":
     clock = Clock(design="digital")
     frame = "{\"notifications\":[\'shower\',\"tub\",\"flo\",\"kehrstin\"]," \
-            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":7.9,\"hum\":65.0}," \
-            "\"forecast\":{\"temp\":16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
+            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":-11,\"hum\":65.0}," \
+            "\"forecast\":{\"temp\":-16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":false}}"
