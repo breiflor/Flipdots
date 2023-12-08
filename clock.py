@@ -160,7 +160,7 @@ class Clock:
                 cm.toggleDot(2, 0)
                 cm.toggleDot(2, 1)
             cm.shift_and_fill(23, 15)
-            if int(round(forecast["temp"])) < -9:
+            if int(round(outdoor["temp"])) < -9:
                 cm.shift_and_fill(0, -4)
             if (int(round(outdoor["temp"])) < 10):
                 cm.shift_and_fill(0,4)
