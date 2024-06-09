@@ -12,7 +12,7 @@ class Clock:
         self.background = background_animation
         self.calender_alert = False
         self.smart_home_bg = None
-        self.notifications = False
+        self.shift_weather_image = False
         self.bus_drove = False
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
@@ -68,14 +68,14 @@ class Clock:
 
     def image_digital(self, h, m):
         hi = self.numgen.get_image(h)
-        hi.shift_and_fill(11, 3)
+        hi.shift_and_fill(12, 3)
         if (h < 10):
             hi.shift_and_fill(0, 5)
         mi = self.numgen.get_image(m)
-        mi.shift_and_fill(11, 17)
+        mi.shift_and_fill(12, 17)
         if (m < 10):
             mi.shift_and_fill(0, 5)
-            mi += self.numgen.get_image(0).shift_and_fill(11, 17)
+            mi += self.numgen.get_image(0).shift_and_fill(12, 17)
         return hi + mi + self.static
 
     def image_analog(self, h, m):
@@ -98,27 +98,27 @@ class Clock:
 
     def update_notifications(self, notification_list):
         if len(notification_list) == 0:
-            self.notifications = False
+            self.shift_weather_image = False
         elif len(notification_list) > 4:
-            self.notifications = True
+            self.shift_weather_image = False
             img = self.numgen_smarthome.get_image(len(notification_list))
             message = Image("icons/notification.txt")
             if (len(notification_list) > 9):
-                img.shift_and_fill(0, 16)
+                img.shift_and_fill(6, 16)
             else:
-                img.shift_and_fill(0, 19)
-            message.shift_and_fill(0, 23)
+                img.shift_and_fill(6, 19)
+            message.shift_and_fill(6, 23)
             img += message
             self.smart_home_bg += img
         else:
-            self.notifications = True
+            self.shift_weather_image = False
             display_start = 0
             for notification in notification_list:
                 try:
                     img = Image("icons/" + notification + ".txt")
                 except:
                     img = Image("icons/noicon.txt")
-                img.shift_and_fill(0, display_start)
+                img.shift_and_fill(6, display_start)
                 self.smart_home_bg += img
                 display_start += 7
 
@@ -149,7 +149,7 @@ class Clock:
                 icon = Image(name)
             except:
                 icon = Image()
-            if self.notifications:
+            if self.shift_weather_image:
                 icon.shift_and_fill(17, 0)
             im += icon
             im += c
@@ -175,14 +175,14 @@ class Clock:
     def update_traffic(self, param):
         try:
             clip = Image("icons/BUS3.txt")
-            clip.shift_and_fill(5)
+            clip.shift_and_fill(17,0)
             if int(param["bus"]["departure 3"]) < 5 and not self.bus_drove:
                 self.bus_drove = True
                 self.background = Animation()
                 self.background.animate_image(clip, loop=False)
             elif int(param["bus"]["departure 3"]) >= 5:
                 im = self.numgen_smarthome.get_image(param["bus"]["departure 3"])
-                im.shift_and_fill(5, 11)
+                im.shift_and_fill(17, 11)
                 self.smart_home_bg += im
                 self.smart_home_bg += clip
                 self.bus_drove = False
@@ -223,7 +223,7 @@ class Clock:
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
-    frame = "{\"notifications\":[\'shower\',\"tub\",\"flo\"]," \
+    frame = "{\"notifications\":[\'shower\',\"tub\",\"flo\",\"kehrstin\"]," \
             "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":-11,\"hum\":65.0}," \
             "\"forecast\":{\"temp\":-16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
