@@ -95,6 +95,7 @@ class Clock:
         self.update_timer(smart_home["timer"])
         self.update_calender(smart_home["calender"])
         self.update_fan(smart_home["fan"])
+        self.update_luften(smart_home["luften"])
 
     def update_notifications(self, notification_list):
         if len(notification_list) == 0:
@@ -220,12 +221,29 @@ class Clock:
         else:
             return False,""
 
+    def update_luften(self, param):
+        print(param)
+        if param["wozi"] == "open":
+            img = Image("icons/lueften.txt")
+            self.smart_home_bg += img
+        elif param["wozi"] == "close":
+            img = Image("icons/ende_lueften.txt")
+            self.smart_home_bg += img
+        if param["esszi"] == "open":
+            img = Image("icons/lueften.txt")
+            img.shift_and_fill(0,3)
+            self.smart_home_bg += img
+        elif param["esszi"] == "close":
+            img = Image("icons/ende_lueften.txt")
+            img.shift_and_fill(0, 3)
+            self.smart_home_bg += img
+
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
     frame = "{\"notifications\":[\'shower\',\"tub\",\"flo\",\"kehrstin\"]," \
-            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"outdoor\":{\"temp\":-11,\"hum\":65.0}," \
-            "\"forecast\":{\"temp\":-16,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
+            "\"washer\":{\"status\":\"off\",\"remaining_time\":0},\"luften\":{\"wozi\":\"none\",\"esszi\":\"open\"},\"outdoor\":{\"temp\":21,\"hum\":65.0}," \
+            "\"forecast\":{\"temp\":26,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":true}}"
