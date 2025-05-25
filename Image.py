@@ -186,9 +186,11 @@ class Textgen:
         return (self.get_image(),self.speed)
 
 if __name__ == "__main__":
-    txt = Textgen("youre not special",scale=0.6)
+    txt = Image()
     while True:
-        txt.get_image().show()
+        txt.show()
+        print(txt.to_string())
+
 
 
 
