@@ -40,8 +40,7 @@ blueprint:
   input:
     mqtt_settings:
       name: Flipdots_Path
-      description:
-        Define where the MQTT Frame is sent to
+      description: Define where the MQTT Frame is sent to
       input:
         text:
           multiline: false
@@ -73,10 +72,12 @@ max_exceeded: silent
 description: This script is used to allow the llm to display simple graphics to the flipdots a 28x28 black and white pixel matrix. The tool takes the following argument [frame] 
 fields:
   frame:
-      text:
-        name: frame
-        description: !input frame_promt
-        required: true
+      name: frame
+      description: !input frame_promt
+      required: true
+      selector:
+        text:
+          multiline: true
 sequence:
   - variables:
       action_data:
@@ -84,5 +85,5 @@ sequence:
   - alias: Display the frame
     action: mqtt.publish
     data:
-        topic: mqtt_settings
+        topic: !input mqtt_settings
         payload: message
