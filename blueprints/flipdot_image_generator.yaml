@@ -37,6 +37,7 @@ blueprint:
   author: MrBreitkopf
   homeassistant:
     min_version: 2024.6.0
+  input:
     prompt_settings:
       name: Prompt settings for the LLM
       icon: mdi:robot
