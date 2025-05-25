@@ -76,6 +76,5 @@ sequence:
         message: '{"image": frame}'
   - alias: Display the frame
     action: mqtt.publish
-    data:
-        topic: "Flipdot/live"
-        payload: message
+    topic: "Flipdot/live"
+    payload: message
