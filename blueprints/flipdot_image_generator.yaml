@@ -74,9 +74,9 @@ fields:
 sequence:
   - variables:
       action_data:
-        message: '{"image": frame}'
+        message: '{{{"image": frame}}}'
   - alias: Display the frame
     action: mqtt.publish
     data:
       topic: "Flipdot/live"
-      payload: '{"image": frame}'
+      payload: '{{{"image": frame}}}'
