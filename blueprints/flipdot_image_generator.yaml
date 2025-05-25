@@ -37,14 +37,6 @@ blueprint:
   author: MrBreitkopf
   homeassistant:
     min_version: 2024.6.0
-  input:
-    mqtt_settings:
-      name: Flipdots_Path
-      description: Define where the MQTT Frame is sent to
-      input:
-        text:
-          multiline: false
-        default: "Flipdot/live" 
     prompt_settings:
       name: Prompt settings for the LLM
       icon: mdi:robot
@@ -85,5 +77,5 @@ sequence:
   - alias: Display the frame
     action: mqtt.publish
     data:
-        topic: !input mqtt_settings
+        topic: "Flipdot/live"
         payload: message
