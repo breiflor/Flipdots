@@ -79,4 +79,4 @@ sequence:
     action: mqtt.publish
     data:
       topic: "Flipdot/live"
-      payload: '{{{"image" | tojson : frame | from_json}}}'
+      payload: '{\"image\" : {{frame | from_json}}}'
