@@ -262,7 +262,11 @@ class Clock:
         self.freeform_icon = None
         self.freeform_unit = None
         self.freeform_number = None
-        self.update_freeform()
+        if self.smart_home_bg is None:
+            self.smart_home_bg = Image()
+        else:
+            self.smart_home_bg.data[17:22, :] = 0
+
 
     def update_freeform(self):
         if self.smart_home_bg is None:
@@ -297,3 +301,4 @@ if __name__ == "__main__":
     while True:
         #clock.update_smarthome(frame)
         clock.getframe()[0].show()
+        clock.clean_freeform()
