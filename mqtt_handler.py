@@ -46,6 +46,7 @@ class Net_Controller:
         self.subcribe("Flipdot/freeform_icon", self.callback)
         self.subcribe("Flipdot/freeform_number", self.callback)
         self.subcribe("Flipdot/freeform_unit", self.callback)
+        self.subcribe("Flipdot/freeform_clear", self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -77,6 +78,12 @@ class Net_Controller:
             if self.clock is not None:
                 try:
                     self.clock.add_freeform_desc_unit(msg.payload.decode())
+                except:
+                    print("currupt mqtt")
+        elif (msg.topic == "Flipdot/freeform_clear"):
+            if self.clock is not None:
+                try:
+                    self.clock.clean_freeform()
                 except:
                     print("currupt mqtt")
         elif (msg.topic == "Flipdot/freeform_icon"):

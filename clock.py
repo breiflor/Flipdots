@@ -245,22 +245,28 @@ class Clock:
     def add_freeform_icon(self,icon_bytes):
         decodedArrays = json.loads(icon_bytes)
         self.freeform_icon = np.asarray(decodedArrays["icon"])
+        self.update_freeform()
         #allows the display of 10x5 freeform icon
 
     def add_freeform_number(self,number):
-        self.freeform_number = number
+        self.freeform_number = json.loads(number)["number"]
+        self.update_freeform()
 
     def add_freeform_desc_unit(self,unit_bytes):
         # allows the display of 5x5 freeform unit
         decodedArrays = json.loads(unit_bytes)
         self.freeform_unit = np.asarray(decodedArrays["unit"])
+        self.update_freeform()
 
     def clean_freeform(self):
         self.freeform_icon = None
         self.freeform_unit = None
         self.freeform_number = None
+        self.update_freeform()
 
     def update_freeform(self):
+        if self.smart_home_bg is None:
+            self.smart_home_bg = Image()
         if self.freeform_icon is not None:
             complete_picture = np.zeros((28, 28), dtype=np.uint8)
             complete_picture[17:22, :10] = self.freeform_icon
@@ -285,9 +291,9 @@ if __name__ == "__main__":
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
             "{\"departure 3\": \"unknown\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":true}}"
-    clock.add_freeform_number(889)
+    clock.add_freeform_number("{\"number\": 889}")
     clock.add_freeform_icon("{\"icon\": [[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0]]}")
     clock.add_freeform_desc_unit("{\"unit\": [[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1]]}")
     while True:
-        clock.update_smarthome(frame)
+        #clock.update_smarthome(frame)
         clock.getframe()[0].show()
