@@ -83,4 +83,4 @@ sequence:
     action: mqtt.publish
     data:
       topic: "Flipdot/freeform_unit"
-      payload: '{"unit" : [{{row0 | from_json}},{{row1 | from_json}},{{row2 | from_json}},{{row3 | from_json}},{{row4 | from_json}}]]}'
+      payload: '{"unit" : [{{row0 | from_json}},{{row1 | from_json}},{{row2 | from_json}},{{row3 | from_json}},{{row4 | from_json}}]}'
