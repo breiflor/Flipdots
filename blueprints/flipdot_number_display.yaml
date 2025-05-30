@@ -1,0 +1,76 @@
+blueprint:
+  name: LLM Script for display a number to the flipdots
+  description:
+    '
+    # This script is used to allow the llm to display a maximum 3 diget int addtional to the nomal smarthome data
+    you can add an icon 10x5 and unit 5x5 to the number using the other scripts
+
+    * No changes are required for any of the settings below for this script to work,
+    but your specific LLM integration may need some fine-tuning. To do that, adjust
+    the prompts sent to the LLM.
+
+    * **Make sure to expose the script to Assist after creating it.**
+
+    * **Make sure to give the script a clear description.** An example can be found
+    below.
+
+    * It is possible to add additional actions to be performed after image generation.
+    There are several variables available which are described below.
+
+
+    ## Example for script description
+
+    `This script is used to allow the llm to display a maximum 3 diget int addtional to the nomal smarthome data
+         you can add an icon 10x5 and unit 5x5 to the number using the other scripts. The tool takes the
+    following argument: number - A maximum 3 digit uint Number. 
+
+    ## Available variables for additional actions
+
+    |Variable|Description|
+
+    |---|---|
+
+    |`number`|A up to 3 digit int Number'
+  domain: script
+  author: MrBreitkopf
+  homeassistant:
+    min_version: 2024.6.0
+  input:
+    prompt_settings:
+      name: Prompt settings for the LLM
+      icon: mdi:robot
+      description:
+        You can use these settings to fine-tune the prompts for your specific
+        LLM (model).  In most cases the defaults should be fine.
+      collapsed: true
+      input:
+        number_promt:
+          name: number_promt
+          description: The prompt that the LLM will use to provide the number.
+          selector:
+            text:
+              multiline: false
+              multiple: false
+          default:
+            'This argument is mandatory and must always be provided no matter
+            what!
+
+            "number" neeeds to be a up to 3 digit integer: '
+mode: parallel
+max_exceeded: silent
+description: This script is used to allow the llm to display a maximum 3 diget int addtional to the nomal smarthome data
+    you can add an icon 10x5 and unit 5x5 to the number using the other scripts. The tool takes the following argument [number]
+fields:
+  number:
+      name: number
+      description: !input number_promt
+      required: true
+      selector:
+        text:
+          multiline: false
+sequence:
+  - alias: Display the number
+    action: mqtt.publish
+    data:
+      topic: "Flipdot/freeform_number"
+      payload: '{"number" : {{number | from_json}}}'

@@ -271,6 +271,8 @@ class Clock:
     def update_freeform(self):
         if self.smart_home_bg is None:
             self.smart_home_bg = Image()
+        else:
+            self.smart_home_bg.data[17:22, :] = 0
         if self.freeform_icon is not None:
             complete_picture = np.zeros((28, 28), dtype=np.uint8)
             complete_picture[17:22, :10] = self.freeform_icon
