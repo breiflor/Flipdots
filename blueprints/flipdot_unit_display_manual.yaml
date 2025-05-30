@@ -71,7 +71,7 @@ fields:
     required: true
     selector:
       text:
-        multiline: false"
+        multiline: false
 
 sequence:
   - alias: Display the unit
