@@ -44,30 +44,35 @@ description: This script is used to allow the llm to display simple 5x5 unit for
 fields:
   row0:
       name: row0
+      description: [1,1,1,1,1]
       required: true
       selector:
         text:
           multiline: false
   row1:
     name: row1
+    description: [0,0,0,0,0]
     required: true
     selector:
       text:
         multiline: false
   row2:
     name: row2
+    description: [0,0,1,0,0]
     required: true
     selector:
       text:
         multiline: false
   row3:
     name: row3
+    description: [0,1,1,1,0]
     required: true
     selector:
       text:
         multiline: false
   row4:
     name: row4
+    description: [1,1,0,1,1]
     required: true
     selector:
       text:
@@ -78,4 +83,4 @@ sequence:
     action: mqtt.publish
     data:
       topic: "Flipdot/freeform_unit"
-      payload: '{"unit" : [[{{row0 | from_json}}],[{{row1 | from_json}}],[{{row2 | from_json}}],[{{row3 | from_json}}],[{{row4 | from_json}}]]}'
+      payload: '{"unit" : [{{row0 | from_json}},{{row1 | from_json}},{{row2 | from_json}},{{row3 | from_json}},{{row4 | from_json}}]]}'
