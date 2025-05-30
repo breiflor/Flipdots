@@ -43,6 +43,9 @@ class Net_Controller:
         self.subcribe("Flipdot/get_animation", self.callback)
         self.subcribe("Flipdot/get_image", self.callback)
         self.subcribe("Flipdot/smart_home",self.callback)
+        self.subcribe("Flipdot/freeform_icon", self.callback)
+        self.subcribe("Flipdot/freeform_number", self.callback)
+        self.subcribe("Flipdot/freeform_unit", self.callback)
         self.run_state_machine()
 
     def on_connect(self,client, userdata, flags, rc):
@@ -70,6 +73,24 @@ class Net_Controller:
             self.play_loop(msg)
         elif (msg.topic == "Flipdot/clock"):
             self.clock_mode(msg)
+        elif (msg.topic == "Flipdot/freeform_unit"):
+            if self.clock is not None:
+                try:
+                    self.clock.add_freeform_desc_unit(msg.payload.decode())
+                except:
+                    print("currupt mqtt")
+        elif (msg.topic == "Flipdot/freeform_icon"):
+            if self.clock is not None:
+                try:
+                    self.clock.add_freeform_icon(msg.payload.decode())
+                except:
+                    print("currupt mqtt")
+        elif (msg.topic == "Flipdot/freeform_number"):
+            if self.clock is not None:
+                try:
+                    self.clock.add_freeform_number(msg.payload.decode())
+                except:
+                    print("currupt mqtt")
         elif (msg.topic == "Flipdot/smart_home"):
             if self.clock is not None:
                 try:

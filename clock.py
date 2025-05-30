@@ -14,6 +14,9 @@ class Clock:
         self.smart_home_bg = None
         self.shift_weather_image = False
         self.bus_drove = False
+        self.freeform_icon = None
+        self.freeform_unit = None
+        self.freeform_number = None
         self.time_between_frames = time_between_frames
         self.time_for_calender = datetime.timedelta(minutes=5)
         self.numgen_smarthome = NumberGenerator("numbers/numbers.json", 1)
@@ -86,6 +89,7 @@ class Clock:
     def update_smarthome(self, msg):
         smart_home = json.loads(msg.replace("'", '"'))
         self.smart_home_bg = Image()
+        self.update_freeform()
         notify, notification = self.update_plants(smart_home["plants"])
         if notify: smart_home["notifications"].append(notification)
         self.update_notifications(smart_home["notifications"])
@@ -238,6 +242,40 @@ class Clock:
             img.shift_and_fill(0, 3)
             self.smart_home_bg += img
 
+    def add_freeform_icon(self,icon_bytes):
+        decodedArrays = json.loads(icon_bytes)
+        self.freeform_icon = np.asarray(decodedArrays["icon"])
+        #allows the display of 10x5 freeform icon
+
+    def add_freeform_number(self,number):
+        self.freeform_number = number
+
+    def add_freeform_desc_unit(self,unit_bytes):
+        # allows the display of 5x5 freeform unit
+        decodedArrays = json.loads(unit_bytes)
+        self.freeform_unit = np.asarray(decodedArrays["unit"])
+
+    def clean_freeform(self):
+        self.freeform_icon = None
+        self.freeform_unit = None
+        self.freeform_number = None
+
+    def update_freeform(self):
+        if self.freeform_icon is not None:
+            complete_picture = np.zeros((28, 28), dtype=np.uint8)
+            complete_picture[17:22, :10] = self.freeform_icon
+            img = Image(data=complete_picture)
+            self.smart_home_bg += img
+        if self.freeform_number is not None:
+            img = self.numgen_smarthome.get_image(self.freeform_number)
+            img.shift_and_fill(17, 11)
+            self.smart_home_bg += img
+        if self.freeform_unit is not None:
+            complete_picture = np.zeros((28, 28), dtype=np.uint8)
+            complete_picture[17:22, 23:] = self.freeform_unit
+            img = Image(data=complete_picture)
+            self.smart_home_bg += img
+
 
 if __name__ == "__main__":
     clock = Clock(design="digital")
@@ -246,8 +284,10 @@ if __name__ == "__main__":
             "\"forecast\":{\"temp\":26,\"weather\":\"rainy\"},\"fan\":{\"Gustav\":\"unavailable\"," \
             "\"Venti\":\"unavailable\",\"Fritz\":\"unavailable\"},\"timer\":200,\"calender\":{\"name\":\"Linz :)\"," \
             "\"start_time\":\"2023-05-16 19:33:00\",\"end_time\":\"2023-05-15 00:00:00\"},\"traffic\":{\"bus\": " \
-            "{\"departure 3\": \"6\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":true}}"
-
+            "{\"departure 3\": \"unknown\" , \"departure 28\": \"unknown\"},\"car\": -1,\"bike\": -1},\"plants\":{\"berndt\":false,\"willhelm\":true}}"
+    clock.add_freeform_number(889)
+    clock.add_freeform_icon("{\"icon\": [[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0],[1, 0, 1, 0, 1,0, 1, 0, 1, 0]]}")
+    clock.add_freeform_desc_unit("{\"unit\": [[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1],[1, 0, 1, 0, 1]]}")
     while True:
         clock.update_smarthome(frame)
         clock.getframe()[0].show()

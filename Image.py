@@ -186,10 +186,9 @@ class Textgen:
         return (self.get_image(),self.speed)
 
 if __name__ == "__main__":
-    txt = Image()
+    txt = Textgen("Hallo")
     while True:
-        txt.show()
-        print(txt.to_string())
+        txt.get_image().show()
 
 
 
