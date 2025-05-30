@@ -44,35 +44,35 @@ description: This script is used to allow the llm to display simple 5x5 unit for
 fields:
   row0:
       name: row0
-      description: [1,1,1,1,1]
+      description: "[1,1,1,1,1]"
       required: true
       selector:
         text:
           multiline: false
   row1:
     name: row1
-    description: [0,0,0,0,0]
+    description: "[0,0,0,0,0]"
     required: true
     selector:
       text:
         multiline: false
   row2:
     name: row2
-    description: [0,0,1,0,0]
+    description: "[0,0,1,0,0]"
     required: true
     selector:
       text:
         multiline: false
   row3:
     name: row3
-    description: [0,1,1,1,0]
+    description: "[0,1,1,1,0]"
     required: true
     selector:
       text:
         multiline: false
   row4:
     name: row4
-    description: [1,1,0,1,1]
+    description: "[1,1,0,1,1]"
     required: true
     selector:
       text:
