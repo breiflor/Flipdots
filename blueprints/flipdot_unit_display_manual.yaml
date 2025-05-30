@@ -48,35 +48,30 @@ fields:
       selector:
         text:
           multiline: false
-        default: "0, 0, 0, 0, 0"
   row1:
     name: row1
     required: true
     selector:
       text:
         multiline: false
-      default: "0, 0, 0, 0, 0"
   row2:
     name: row2
     required: true
     selector:
       text:
         multiline: false
-      default: "0, 0, 0, 0, 0"
   row3:
     name: row3
     required: true
     selector:
       text:
         multiline: false
-      default: "0, 0, 0, 0, 0"
   row4:
     name: row4
     required: true
     selector:
       text:
-        multiline: false
-      default: "0, 0, 0, 0, 0"
+        multiline: false"
 
 sequence:
   - alias: Display the unit
