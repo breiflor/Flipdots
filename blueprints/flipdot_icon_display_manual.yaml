@@ -1,0 +1,86 @@
+blueprint:
+  name: Script for display a simple icon in front of the number to the flipdots
+  description:
+    '
+    # This script is used to allow the llm to display a simple icon symbol 5x5 after the number. 
+    For the number value and a 5x10 icon in front of the number use the other two scripts.
+
+    * No changes are required for any of the settings below for this script to work,
+    but your specific LLM integration may need some fine-tuning. To do that, adjust
+    the prompts sent to the LLM.
+
+    * **Make sure to expose the script to Assist after creating it.**
+
+    * **Make sure to give the script a clear description.** An example can be found
+    below.
+
+    * It is possible to add additional actions to be performed after image generation.
+    There are several variables available which are described below.
+
+
+    ## Example for script description
+
+    `This script is used to allow the llm to display a simple icon symbol after the number. 
+     For the number value and a 5x10 icon in front of the number use the other two scripts.
+     : icon - A json formatted 5x5 pixel array including only 0 or 1 
+    representing a black an white image.
+
+    ## Available variables for additional actions
+
+    |Variable|Description|
+
+    |---|---|
+
+    |`icon`|A json formatted 10x5 pixel array including only 0 or 1 
+    representing a black an white image. A sample black only icon is strucured as follows:
+    [[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0]]'
+  domain: script
+  author: MrBreitkopf
+  homeassistant:
+    min_version: 2024.6.0
+mode: parallel
+max_exceeded: silent
+description: This script is used to allow the llm to display simple 5x5 icon for the number to the flipdots a 28x28 black and white pixel matrix. The tool takes the following argument [icon]
+fields:
+  row0:
+      name: row0
+      description: "[1,1,1,1,1,1,1,1,1,1]"
+      required: true
+      selector:
+        text:
+          multiline: false
+  row1:
+    name: row1
+    description: "[0,0,0,0,0,0,0,0,0,0]"
+    required: true
+    selector:
+      text:
+        multiline: false
+  row2:
+    name: row2
+    description: "[0,0,1,0,0,0,0,1,0,0]"
+    required: true
+    selector:
+      text:
+        multiline: false
+  row3:
+    name: row3
+    description: "[0,1,1,1,0,0,1,1,1,0]"
+    required: true
+    selector:
+      text:
+        multiline: false
+  row4:
+    name: row4
+    description: "[1,1,0,1,1,1,1,0,1,1]"
+    required: true
+    selector:
+      text:
+        multiline: false
+
+sequence:
+  - alias: Display the icon
+    action: mqtt.publish
+    data:
+      topic: "Flipdot/freeform_icon"
+      payload: '{"icon" : [{{row0 | from_json}},{{row1 | from_json}},{{row2 | from_json}},{{row3 | from_json}},{{row4 | from_json}}]}'
