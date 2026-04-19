@@ -1,6 +1,4 @@
-import json
 import time
-import random
 import math
 from Image import *
 
@@ -108,6 +106,6 @@ class Pong:
             self.ball = [8,10]
 
 if __name__ == "__main__":
-    snake = Snake()
+    pong = Pong()
     while(1):
-        snake.getframe()[0].show(1)
+        pong.getframe()[0].show(1)
