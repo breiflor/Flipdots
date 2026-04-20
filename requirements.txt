@@ -1,6 +1,6 @@
 paho-mqtt
 numpy
-json
-python-opencv
+
+opencv-python
 pyserial
 PySimpleGUI

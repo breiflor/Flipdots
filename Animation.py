@@ -64,10 +64,7 @@ class Animation:
             json.dump(storage_list, json_file)
 
     def create_storage_list(self,path):
-        storage_list = []
-        for id,entry in enumerate(self.image_list):
-            storage_list.append({"Filepath": entry[0].save(path+"/"+str(id)+".txt"), "Screentime" : entry[1] })
-        return storage_list
+        return [{"Filepath": entry[0].save(f"{path}/{id}.txt"), "Screentime": entry[1]} for id, entry in enumerate(self.image_list)]
 
     def parse_storage_list(self,list,dir):
         self.image_list = []
