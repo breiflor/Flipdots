@@ -148,12 +148,7 @@ class Image:
         img = cv2.GaussianBlur(img, (3,3), 0)
         img = cv2.Canny(image=img, threshold1=min, threshold2=max,)
         img = cv2.resize(img,(28, 28), interpolation = cv2.INTER_AREA)
-        for x,row in enumerate(img):
-            for y,element in enumerate(row):
-                if(element == 0):
-                    self.data[x][y] = int(0)
-                else:
-                    self.data[x][y] = int(1)
+        self.data = np.where(img == 0, 0, 1)
 
 class Textgen:
 
