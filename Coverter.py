@@ -1,12 +1,10 @@
-import copy
-import datetime
 import cv2
-from Image import *
+import pathlib
 import requests
 import json
-from Animation import *
-import numpy as np
 import PySimpleGUI as sg
+from Image import *
+from Animation import *
 
 class Converter:
 
@@ -61,8 +59,7 @@ class Converter:
         cap = cv2.VideoCapture(file)
         frame = cap.read()[1]
         self.image.from_frame(frame,values['min'],values['max'],values['size'])
-        img = np.zeros((28, 28))
-        img = (img + self.image.getData()) * 250
+        img = self.image.getData() * 250
         img = cv2.resize(img, (500, 500), interpolation=cv2.INTER_AREA)
         imgbytes = cv2.imencode('.png', img)[1].tobytes()  # Change the Image Element to show the new image
         self.window['-IMAGE-'].update(data=imgbytes)
@@ -75,15 +72,14 @@ class Converter:
             if not sucess:
                 break
             if cnter == values["fps"]:
-                img = Image()
+                frame_img = Image()
                 frame  = cv2.resize(frame,(500, 500), interpolation = cv2.INTER_AREA)
-                img.from_frame(frame,values['min'],values['max'],values['size'],False)
-                self.animation.insert(img,values["fps"]/60)
+                frame_img.from_frame(frame,values['min'],values['max'],values['size'],False)
+                self.animation.insert(frame_img,values["fps"]/60)
                 cnter = 0
                 imgbytes=cv2.imencode('.png',frame)[1].tobytes()
                 self.window['-RAW-'].update(data=imgbytes)
-                img = np.zeros((28, 28))
-                img = (img + self.image.getData())*250
+                img = frame_img.getData() * 250
                 img = cv2.resize(img,(500, 500), interpolation = cv2.INTER_AREA)
                 imgbytes=cv2.imencode('.png',img)[1].tobytes()
                 self.window['-IMAGE-'].update(data=imgbytes)
@@ -117,8 +113,7 @@ class Converter:
                 imgbytes=cv2.imencode('.png',frame)[1].tobytes()
                 self.window['-RAW-'].update(data=imgbytes)
                 self.image.from_frame(frame,values['min'],values['max'],values['size'],False)
-                img = np.zeros((28, 28))
-                img = (img + self.image.getData())*250
+                img = self.image.getData() * 250
                 img = cv2.resize(img,(500, 500), interpolation = cv2.INTER_AREA)
                 imgbytes=cv2.imencode('.png',img)[1].tobytes()
                 self.window['-IMAGE-'].update(data=imgbytes)
@@ -138,8 +133,7 @@ class Converter:
         frame = cap.read()[1]
         frame  = cv2.resize(frame,(500, 500), interpolation = cv2.INTER_AREA)
         self.image.from_frame(frame,values['min'],values['max'],values['size'],False)
-        img = np.zeros((28, 28))
-        img = (img + self.image.getData())*250
+        img = self.image.getData() * 250
         img = cv2.resize(img,(500, 500), interpolation = cv2.INTER_AREA)
         imgbytes=cv2.imencode('.png',img)[1].tobytes()
         self.window['-IMAGE-'].update(data=imgbytes)
