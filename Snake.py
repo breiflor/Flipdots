@@ -78,8 +78,13 @@ class Snake:
                 image.toggleDot(entry[1],entry[0])
             image.toggleDot(self.fruit[1],self.fruit[0])
             return (image,self.speed)
+        elif self.state == "game_over_screen":
+            image = Image()
+            image.insert_text("Game",(0,8),scale=0.6)
+            image.insert_text("over",(1,15),scale=0.7)
+            self.state = "game_over"
+            return (image, 2)
         elif self.state == "game_over":
-             #return Gameover image TODO
             if self.change_to == 'UP' :
                 name = list(self.name)
                 name[self.nam_at] = chr(ord(self.name[self.nam_at])-1)
@@ -130,7 +135,7 @@ class Snake:
         self.change_to = input
 
     def game_over(self):
-        self.state = "game_over"
+        self.state = "game_over_screen"
         self.change_to = 'NONE'
         self.nam_at = 0
 
