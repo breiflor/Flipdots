@@ -2,6 +2,7 @@ import time
 import os
 import json
 from pathlib import Path
+from path_utils import ensure_safe_path
 from Snake import *
 from Pong import *
 
@@ -160,15 +161,16 @@ class Net_Controller:
     def remove_asset(self,msg):
         #removes an image from the filesystem
         try:
-            p = Path(msg.payload.decode())
+            safe_path = ensure_safe_path(msg.payload.decode())
+            p = Path(safe_path)
             if p.is_file():
                 p.unlink(missing_ok=True)
             else:
                 for sub in p.iterdir() :
                     sub.unlink(missing_ok=True)
                 p.rmdir()
-        except:
-            print("Error during removal")
+        except Exception as e:
+            print(f"Error during removal: {e}")
 
     def play(self,msg):
         #plays asset name

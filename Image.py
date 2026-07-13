@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import pathlib
 import json
+from path_utils import ensure_safe_path
 
 
 class NumpyArrayEncoder(json.JSONEncoder):
@@ -119,6 +120,7 @@ class Image:
         pass
 
     def load(self, imagepath):
+        imagepath = ensure_safe_path(imagepath)
         suf = pathlib.Path(imagepath).suffix
         if(suf == ".png"):
             self.load_image(imagepath)
@@ -128,6 +130,7 @@ class Image:
             print("Wrong Type loading Image Data from "+ imagepath +" (only .png and .txt supported)")
 
     def save(self, imagepath):
+        imagepath = ensure_safe_path(imagepath)
         suf = pathlib.Path(imagepath).suffix
         if(suf == ".png"):
             self.save_image(imagepath)
