@@ -1,5 +1,6 @@
 import pathlib
 from Image import *
+from path_utils import ensure_safe_path
 import json
 import copy
 
@@ -44,6 +45,7 @@ class Animation:
                 self.image_list.append((copy.deepcopy(im), speed))
 
     def load(self,path):
+        path = ensure_safe_path(path)
         if (pathlib.Path(path).is_file()):
             file = path
         else:
@@ -52,6 +54,7 @@ class Animation:
             self.parse_storage_list(json.load(json_file),str(pathlib.Path(file).parent))
 
     def store(self,path):
+        path = ensure_safe_path(path)
         if (pathlib.Path(path).is_file()):
             file = path
             dir = str(pathlib.Path(file).parent)+"/"
