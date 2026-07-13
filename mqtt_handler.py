@@ -6,6 +6,7 @@ from pathlib import Path
 from path_utils import ensure_safe_path
 from Snake import *
 from Pong import *
+from Breakout import *
 
 from paho.mqtt import client as mqtt_client
 from Display import *
@@ -253,6 +254,9 @@ class Net_Controller:
             self.mode = "game"
         elif msg.payload.decode() == "pong":
             self.game = Pong()
+            self.mode = "game"
+        elif msg.payload.decode() == "breakout":
+            self.game = Breakout()
             self.mode = "game"
         else:
             pass #no valid game
