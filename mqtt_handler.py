@@ -1,6 +1,7 @@
 import time
 import os
 import json
+import subprocess
 from pathlib import Path
 from Snake import *
 from Pong import *
@@ -130,7 +131,8 @@ class Net_Controller:
         sleep = Image("icons/sleep.txt")
         self.display.sendImage(sleep)
         self.mode = None
-        print(os.system("sh shutdown.sh"))
+        script_path = os.path.join(os.path.dirname(__file__), "shutdown.sh")
+        print(subprocess.run(["sh", script_path], check=False))
         exit()
 
     def live_mode(self,msg):
